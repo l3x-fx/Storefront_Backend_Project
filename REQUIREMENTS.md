@@ -5,20 +5,20 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index 
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products 
-- [OPTIONAL] Products by category (args: product category)
+- Index: '/products' [GET] 
+- Show: '/products/:id' [GET]
+- Create [token required]: '/products' [POST]
+- [OPTIONAL] Top 5 most popular products: '/products/topfive' [GET]
+- [OPTIONAL] Products by category (args: product category): '/products/:category' [GET]
 
 #### Users
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- Index [token required]: '/users' [GET] 
+- Show [token required]: '/users/:id' [GET] 
+- Create [token required]: '/users' [POST] 
 
 #### Orders
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Current Order by user (args: user id)[token required]: '/orders/:user_id' [GET] 
+- [OPTIONAL] Completed Orders by user (args: user id)[token required]: '/orders/completed/:user_id' [GET]                                                                             
 
 ## Data Shapes
 #### Product
@@ -39,4 +39,28 @@ These are the notes from a meeting with the frontend developer that describe wha
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+## Tables
+#### Table Products 
+- id: SERIAL PRIMARY KEY
+- name: VARCHAR(255)
+- price: DECIMAL(10, 2) NOT NULL
+- category: VARCHAR(100)
+
+#### Table Users
+- id: SERIAL PRIMARY KEY 
+- firstname: VARCHAR(255)
+- lastname: VARCHAR(255)
+- password: VARCHAR(255)
+
+#### Table Orders
+- id: SERIAL PRIMARY KEY
+- status: ENUM ('active', 'complete') NOT NULL
+- FOREIGN KEY (user_id) References Users(id)
+
+#### JoinTable Order_Products
+- id: SERIAL PRIMARY KEY
+- order_id: BIGINT REFERNCES orders(id)
+- products_id: BIGINT REFERNCES products(id)
+- quantity: INT
 
