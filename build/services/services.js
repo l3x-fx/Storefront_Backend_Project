@@ -12,73 +12,70 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderStore = void 0;
+exports.ServiceStore = void 0;
 // @ts-ignore
 const database_1 = __importDefault(require("../database"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-class OrderStore {
-    index() {
+class ServiceStore {
+    showTopFiveProducts() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const sql = 'SELECT product_id, COUNT(product_id) AS Count FROM order_products GROUP BY product_id ORDER BY Count DESC LIMIT 5;';
                 // @ts-ignore
                 const conn = yield database_1.default.connect();
-                const sql = 'SELECT * FROM orders ';
                 const result = yield conn.query(sql);
                 conn.release();
                 return result.rows;
             }
             catch (err) {
-                throw new Error(`Could not get orders: ${err}`);
+                throw new Error(`Could not get Top 5 products. Error: ${err}`);
             }
         });
     }
-    show(id) {
+    showProductsOfOrder(order_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const sql = 'SELECT * FROM users WHERE order_id=($1)';
+                const sql = 'SELECT product_id, quantity FROM order_products WHERE order_id=($1)';
+                // @ts-ignore
+                const conn = yield database_1.default.connect();
+                const result = yield conn.query(sql, [order_id]);
+                conn.release();
+                return result.rows;
+            }
+            catch (_a) {
+                throw new Error(`Could not get products of order `);
+            }
+        });
+    }
+    showRecentOrderByUserId(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // @ts-ignore
+                const conn = yield database_1.default.connect();
+                const sql1 = 'SELECT * FROM orders WHERE user_id=($1) ORDER BY id DESC LIMIT 1;';
+                const result = yield conn.query(sql1, [id]);
+                conn.release();
+                return result.rows[0];
+            }
+            catch (err) {
+                throw new Error(`Could not find user ${id}. Error: ${err}`);
+            }
+        });
+    }
+    showCompletedOrdersByUser(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const sql = 'SELECT * FROM orders WHERE user_id=($1) AND status=complete;';
                 // @ts-ignore
                 const conn = yield database_1.default.connect();
                 const result = yield conn.query(sql, [id]);
                 conn.release();
-                return result.rows[0];
+                return result.rows;
             }
             catch (err) {
-                throw new Error(`Could not find order ${id}. Error: ${err}`);
-            }
-        });
-    }
-    create(user_id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const sql = 'INSERT INTO orders (status, user_id) VALUES(active, $1) RETURNING *';
-                // @ts-ignore
-                const conn = yield database_1.default.connect();
-                const result = yield conn.query(sql, [user_id]);
-                const order = result.rows[0];
-                conn.release();
-                return order;
-            }
-            catch (err) {
-                throw new Error(`Could not create new order. Error: ${err}`);
-            }
-        });
-    }
-    addProductToOrder(quantity, order_id, product_id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
-                //@ts-ignore
-                const conn = yield database_1.default.connect();
-                const result = yield conn
-                    .query(sql, [quantity, order_id, product_id]);
-                conn.release();
-                return result.rows[0];
-            }
-            catch (err) {
-                throw new Error(`Could not add product ${product_id} to order ${order_id}: ${err}`);
+                throw new Error(`Could not add completed orders of user user ${id}. Error: ${err}`);
             }
         });
     }
 }
-exports.OrderStore = OrderStore;
+exports.ServiceStore = ServiceStore;
+//SELECT * FROM orders WHERE user_id=($1) AND status=completed JOIN order_products ON orders.id=order_products.order_id

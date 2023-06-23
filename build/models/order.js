@@ -12,31 +12,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserStore = void 0;
+exports.OrderStore = void 0;
 // @ts-ignore
 const database_1 = __importDefault(require("../database"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-class UserStore {
+class OrderStore {
     index() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // @ts-ignore
                 const conn = yield database_1.default.connect();
-                const sql = 'SELECT * FROM users';
+                const sql = 'SELECT * FROM orders ';
                 const result = yield conn.query(sql);
                 conn.release();
                 return result.rows;
             }
             catch (err) {
-                throw new Error(`Could not get users: ${err}`);
+                throw new Error(`Could not get orders: ${err}`);
             }
         });
     }
     show(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const sql = 'SELECT * FROM users WHERE id=($1)';
+                const sql = 'SELECT * FROM orders WHERE id=($1)';
                 // @ts-ignore
                 const conn = yield database_1.default.connect();
                 const result = yield conn.query(sql, [id]);
@@ -44,25 +44,41 @@ class UserStore {
                 return result.rows[0];
             }
             catch (err) {
-                throw new Error(`Could not find user ${id}. Error: ${err}`);
+                throw new Error(`Could not find order ${id}. Error: ${err}`);
             }
         });
     }
-    create(user) {
+    create(user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const sql = 'INSERT INTO users (firstname, lastname, password_digest) VALUES($1, $2, $3) RETURNING *';
+                const sql = 'INSERT INTO orders (status, user_id) VALUES($1, $2) RETURNING *';
                 // @ts-ignore
                 const conn = yield database_1.default.connect();
-                const result = yield conn.query(sql, [user.firstname, user.lastname, user.password]);
-                const weaponresult = result.rows[0];
+                const result = yield conn.query(sql, ['active', user_id]);
+                const order = result.rows[0];
                 conn.release();
-                return weaponresult;
+                return order;
             }
             catch (err) {
-                throw new Error(`Could not add new user ${user.firstname} ${user.lastname}. Error: ${err}`);
+                throw new Error(`Could not create new order. Error: ${err}`);
+            }
+        });
+    }
+    addProductToOrder(quantity, order_id, product_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
+                //@ts-ignore
+                const conn = yield database_1.default.connect();
+                const result = yield conn
+                    .query(sql, [quantity, order_id, product_id]);
+                conn.release();
+                return result.rows[0];
+            }
+            catch (err) {
+                throw new Error(`Could not add product ${product_id} to order ${order_id}: ${err}`);
             }
         });
     }
 }
-exports.UserStore = UserStore;
+exports.OrderStore = OrderStore;

@@ -5,7 +5,7 @@ import cors from 'cors'
 import users_routes from './handlers/users'
 import products_routes from './handlers/products'
 import orders_routes from './handlers/oders'
-import service_routes from './handlers/dashboardhandler'
+import service_routes from './handlers/servicehandler'
 
 const app: express.Application = express()
 const address: string = "0.0.0.0:3000"

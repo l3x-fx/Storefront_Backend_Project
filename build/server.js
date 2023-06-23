@@ -10,7 +10,7 @@ const cors_1 = __importDefault(require("cors"));
 const users_1 = __importDefault(require("./handlers/users"));
 const products_1 = __importDefault(require("./handlers/products"));
 const oders_1 = __importDefault(require("./handlers/oders"));
-const dashboardhandler_1 = __importDefault(require("./handlers/dashboardhandler"));
+const servicehandler_1 = __importDefault(require("./handlers/servicehandler"));
 const app = (0, express_1.default)();
 const address = "0.0.0.0:3000";
 const corsOptions = {
@@ -27,4 +27,4 @@ app.get('/', function (req, res) {
 (0, users_1.default)(app);
 (0, products_1.default)(app);
 (0, oders_1.default)(app);
-(0, dashboardhandler_1.default)(app);
+(0, servicehandler_1.default)(app);
