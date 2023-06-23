@@ -1,6 +1,6 @@
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
-    name VARCHR(255), 
+    name VARCHAR(255), 
     price DECIMAL(10,2) NOT NULL, 
     category VARCHAR(100)
 );

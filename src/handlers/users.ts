@@ -15,8 +15,8 @@ const index = async (_req: Request, res: Response) => {
     res.json(user)
 }
 
-const show = async (_req: Request, res: Response) => {
-    const user = await store.show(_req.body.id)
+const show = async (req: Request, res: Response) => {
+    const user = await store.show(req.params.id)
     res.json(user)
 }
 

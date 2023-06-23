@@ -1,10 +1,10 @@
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
-    status ENUM('active', 'complete') NOT NULL,
-    user_id BIGINT REFERNCES orders(id)
+    status VARCHAR,
+    user_id BIGINT REFERENCES orders(id)
 );
 
-INSER INTO orders (status, user_id) VALUES (
+INSERT INTO orders (status, user_id) VALUES 
     ('complete', 4),
     ('complete', 1),
     ('complete', 4),
@@ -19,4 +19,3 @@ INSER INTO orders (status, user_id) VALUES (
     ('active', 5),
     ('active', 3),
     ('active', 1);
-);
