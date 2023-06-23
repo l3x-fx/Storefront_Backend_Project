@@ -44,6 +44,7 @@ const showByCategory = async (req: Request, res: Response) => {
     }
 }
 
+//map product infos
 const showTopFiveProducts= async (_req: Request, res:Response) => {
     try {
         const topFive = await store.showTopFiveProducts()

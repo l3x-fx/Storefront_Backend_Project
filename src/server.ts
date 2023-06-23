@@ -5,7 +5,6 @@ import cors from 'cors'
 import users_routes from './handlers/users'
 import products_routes from './handlers/products'
 import orders_routes from './handlers/oders'
-import service_routes from './auth/auth'
 
 const app: express.Application = express()
 const address: string = "0.0.0.0:3000"
@@ -17,7 +16,6 @@ app.listen(3000, function () {
     console.log(`starting app on: ${address}`)
 })
 
-
 app.get('/', function (_req: Request, res: Response) {
     res.send('Hello World!')
 })
@@ -25,4 +23,3 @@ app.get('/', function (_req: Request, res: Response) {
 users_routes(app)
 products_routes(app)
 orders_routes(app)
-service_routes(app)
