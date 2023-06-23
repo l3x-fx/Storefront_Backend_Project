@@ -1,13 +1,7 @@
-import express, { Request, Response, NextFunction } from 'express'
-
+import express, { Request, Response } from 'express'
 import { Product } from "../models/product"
 import { ProductStore } from '../models/product'
-import dotenv from 'dotenv'
-import { ServiceStore } from '../services/services'
-import verifyAuthToken from './servicehandler'
-
-dotenv.config()
-const {TOKEN_SECRET} = process.env
+import { verifyAuthToken } from '../auth/auth'
 
 const store = new ProductStore()
 
@@ -50,10 +44,20 @@ const showByCategory = async (req: Request, res: Response) => {
     }
 }
 
+const showTopFiveProducts= async (_req: Request, res:Response) => {
+    try {
+        const topFive = await store.showTopFiveProducts()
+        res.json(topFive)
+    }catch (error) 
+    {
+        res.status(401).json({ error });
+    }
+}
 const users_routes = (app: express.Application) => {
     app.get('/products', index)
     app.get('/products/:id', showById)
     app.post('/products', verifyAuthToken,  create)
+    app.get('/products/stats/topFive', showTopFiveProducts)
     app.get('/products/category/:category', showByCategory)
 }
 

@@ -65,5 +65,18 @@ export class ProductStore  {
             throw new Error(`Could not find category ${category}. Error: ${err}`)
         } 
     }
+
+    async showTopFiveProducts(): Promise<Product> {
+        try {
+            const sql = 'SELECT product_id, COUNT(product_id) AS Count FROM order_products GROUP BY product_id ORDER BY Count DESC LIMIT 5;'
+            // @ts-ignore
+            const conn = await Client.connect()
+            const result:any = await conn.query(sql)
+            conn.release()        
+            return result.rows  
+        } catch (err) {
+            throw new Error(`Could not get Top 5 products. Error: ${err}`)
+        }
+    }
     
 }

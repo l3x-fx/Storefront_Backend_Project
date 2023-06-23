@@ -5,24 +5,20 @@ import cors from 'cors'
 import users_routes from './handlers/users'
 import products_routes from './handlers/products'
 import orders_routes from './handlers/oders'
-import service_routes from './handlers/servicehandler'
+import service_routes from './auth/auth'
 
 const app: express.Application = express()
 const address: string = "0.0.0.0:3000"
 
-const corsOptions= {
-    optionsSuccessStatus: 200
-}
-
 app.use(bodyParser.json())
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`)
 })
 
 
-app.get('/', function (req: Request, res: Response) {
+app.get('/', function (_req: Request, res: Response) {
     res.send('Hello World!')
 })
 
