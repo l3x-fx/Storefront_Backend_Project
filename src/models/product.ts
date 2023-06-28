@@ -8,8 +8,9 @@ dotenv.config()
 export type Product = {
     id?: Number;
     name: string; 
-    price: string;
+    price: number;
     category: string;
+    total_quantity?: number;
 }
 
 export class ProductStore  {
@@ -26,7 +27,7 @@ export class ProductStore  {
         }        
     }
 
-    async showById(id: string): Promise<Product []> {
+    async showProductById(id: number): Promise<Product> {
         try {
             const sql = 'SELECT * FROM products WHERE id=($1)'
             // @ts-ignore
@@ -39,7 +40,7 @@ export class ProductStore  {
         } 
     }
 
-    async create(product: Product): Promise<Product> {
+    async createNewProduct(product: Product): Promise<Product> {
         try {
             const sql = 'INSERT INTO products (name, price, category) VALUES($1, $2, $3) RETURNING *'
             // @ts-ignore
@@ -53,7 +54,7 @@ export class ProductStore  {
         }
     }
 
-    async showByCategory(category: string): Promise<Product []> {
+    async showProductByCategory(category: string): Promise<Product []> {
         try {
             const sql = 'SELECT * FROM products WHERE category=($1)'
             // @ts-ignore
@@ -66,14 +67,37 @@ export class ProductStore  {
         } 
     }
 
-    async showTopFiveProducts(): Promise<Product> {
+    async showTopFiveProducts(): Promise<Product []> {
         try {
-            const sql = 'SELECT product_id, SUM(quantity) AS total_quantity FROM order_products GROUP BY product_id ORDER BY total_quantity DESC LIMIT 5;'
+            const sql = 'SELECT product_id AS id, SUM(quantity) AS total_quantity FROM order_products GROUP BY product_id ORDER BY total_quantity DESC LIMIT 5;'
             // @ts-ignore
             const conn = await Client.connect()
-            const result:any = await conn.query(sql)
-            conn.release()        
-            return result.rows  
+            const result = await conn.query(sql)
+            conn.release()   
+
+            const productsShort = result.rows
+
+            const products = await Promise.all(
+                productsShort.map(async (product: { id: number, total_quantity:number }) => {
+                    try{
+                        const result = await this.showProductById(product.id)
+
+                        const updatedProduct: Product = {
+                            id: product.id,
+                            name: result.name,
+                            price: result.price,
+                            category: result.category,
+                            total_quantity: product.total_quantity                
+                        };
+                        
+                        return updatedProduct;
+
+                    } catch (err) {
+                        throw new Error(`Could not get product ${product.id}. Error: ${err}`)
+                    }
+                })
+            );
+            return products
         } catch (err) {
             throw new Error(`Could not get Top 5 products. Error: ${err}`)
         }

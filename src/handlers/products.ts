@@ -15,28 +15,32 @@ const index = async (_req: Request, res: Response) => {
     }
 }
 
-const showById = async (req: Request, res: Response) => {
+const showProductById = async (req: Request, res: Response) => {
     try {
-        const product = await store.showById(req.params.id)
+        const product = await store.showProductById(parseInt(req.params.id))
         res.json(product)
     } catch (error) {
         res.status(401).json({ error });
     }
 }
 
-const create = async (req: Request, res: Response) => { 
+const createProduct = async (req: Request, res: Response) => { 
     try{
-        const product: Product = { name: req.body.name, price: req.body.price, category: req.body.category } 
-        const newProduct = await store.create(product) 
+        const product: Product = { 
+            name: req.body.name, 
+            price: req.body.price, 
+            category: req.body.category 
+        } 
+        const newProduct = await store.createNewProduct(product) 
         res.json(newProduct)
     } catch (error) {
         res.status(401).json({ error });
     }
 }
 
-const showByCategory = async (req: Request, res: Response) => {
+const showProductByCategory = async (req: Request, res: Response) => {
     try {
-        const product = await store.showByCategory(req.params.category)
+        const product = await store.showProductByCategory(req.params.category)
         res.json(product)
     } catch (error) 
     {
@@ -44,7 +48,7 @@ const showByCategory = async (req: Request, res: Response) => {
     }
 }
 
-//map product infos
+
 const showTopFiveProducts= async (_req: Request, res:Response) => {
     try {
         const topFive = await store.showTopFiveProducts()
@@ -56,10 +60,10 @@ const showTopFiveProducts= async (_req: Request, res:Response) => {
 }
 const users_routes = (app: express.Application) => {
     app.get('/products', index)
-    app.get('/products/:id', showById)
-    app.post('/products', verifyAuthToken,  create)
+    app.get('/products/:id', showProductById)
+    app.post('/products', verifyAuthToken,  createProduct)
     app.get('/products/stats/topFive', showTopFiveProducts)
-    app.get('/products/category/:category', showByCategory)
+    app.get('/products/category/:category', showProductByCategory)
 }
 
 export default users_routes

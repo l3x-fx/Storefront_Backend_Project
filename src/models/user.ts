@@ -10,6 +10,7 @@ const saltRounds = SALT_ROUNDS
 
 export type User = {
     id?: Number;
+    username: string;
     firstname: string; 
     lastname: string;
     password: string;
@@ -30,7 +31,7 @@ export class UserStore  {
         
     }
 
-    async show(id: string): Promise<User> {
+    async showUserById(id: string): Promise<User> {
         try {
             const sql = 'SELECT * FROM users WHERE id=($1)'
             // @ts-ignore
@@ -45,7 +46,7 @@ export class UserStore  {
     
     async create(user: User): Promise<User> {
         try {
-            const sql = 'INSERT INTO users (firstname, lastname, password_digest) VALUES($1, $2, $3) RETURNING *'
+            const sql = 'INSERT INTO users (username, firstname, lastname, password_digest) VALUES($1, $2, $3, $4) RETURNING *'
             // @ts-ignore
             const conn = await Client.connect()     
             
@@ -55,7 +56,7 @@ export class UserStore  {
                 parseInt(saltRounds)
             );
             console.log(hash)
-            const result:any = await conn.query(sql, [user.firstname, user.lastname, hash])
+            const result = await conn.query(sql, [user.username, user.firstname, user.lastname, hash])
             conn.release()        
             return result.rows[0]     
         } catch (err) {
@@ -64,20 +65,16 @@ export class UserStore  {
     }
     
 
-    async authenticate(firstname: string, lastname:string, password: string): Promise<User | null> {
+    async authenticate(username:string, password:string): Promise<User | null> {
         // @ts-ignore
         const conn = await Client.connect()
-        const sql = 'SELECT password_digest FROM users WHERE firstname=($1) AND lastname=($2)'
-        const result = await conn.query(sql, [firstname, lastname])
-
-        console.log(password+pepper)
+        const sql = 'SELECT password_digest FROM users WHERE username=($1)'
+        const result = await conn.query(sql, [username ])
+        conn.release() 
         
-        if(result.rows.length) {
-
-            const user = result.rows[0]
-            console.log(user)
-
-            if (bcrypt.compareSync(password+pepper, user.password_digest)) {
+        if(result.rows.length) {  
+            const user = result.rows[0]         
+            if (bcrypt.compareSync(password + pepper, user.password_digest)) {
             return user
             }
         }

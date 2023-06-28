@@ -1,15 +1,15 @@
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255), 
-    price DECIMAL(10,2) NOT NULL, 
+    price INT NOT NULL, 
     category VARCHAR(100)
 );
 
 INSERT INTO products (name, price, category) VALUES
-    ('The One Ring', 999.99, 'Jewelry'),
-    ('Sting', 159.99, 'Weapon'),
-    ('Anduril', 589.99, 'Weapon'),
-    ('Elven Cloak', 79.99, 'Apparel'),
-    ('Evenstar Necklace', 99.99, 'Jewelry'),
-    ('Mithril Armor', 299.99, 'Apparel'),
-    ('Hobbit Pipe', 29.99, 'Accessories');
+    ('The One Ring', 999, 'Jewelry'),
+    ('Sting', 159, 'Weapon'),
+    ('Anduril', 589, 'Weapon'),
+    ('Elven Cloak', 79, 'Apparel'),
+    ('Evenstar Necklace', 99, 'Jewelry'),
+    ('Mithril Armor', 299, 'Apparel'),
+    ('Hobbit Pipe', 29, 'Accessories');
