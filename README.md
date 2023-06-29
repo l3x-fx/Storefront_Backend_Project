@@ -9,15 +9,9 @@ To set up the workspace, follow these steps:
 - create the postgres databases `store_dev`and `store_test`. 
 - create the user `user_one` and grant access to all databases
 
-
-
 ## Ports
 - `5432` as Database Port
 - `3000` as Backend Port
-
-## .env
-Usually the .env file should never be included in the repository. 
-However to pass this project, I had to proved provide the environment variables, therefore the .env File is included 
 
 ## Testing
 To run the tests, please change the environemnt variable `ENV`  in the file `.env`from `dev` to `test`
