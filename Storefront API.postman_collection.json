@@ -12,8 +12,72 @@
 				{
 					"name": "All Products",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product By ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/products/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"name\": \"Hobbit Ale\", \r\n    \"price\": 99,\r\n    \"category\": \"Food\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:3000/products",
 							"protocol": "http",
@@ -53,47 +117,10 @@
 					"response": []
 				},
 				{
-					"name": "Product By ID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJmaXJzdG5hbWUiOiJtaSIsImxhc3RuYW1lIjoiTWphZSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRDT3FjYk5BLy5tU3NRWlFIdGxJaUlPN3dvUWZaaUpDNU54ZG5ZcTE1di9NQmY2QkdpSVQ5YSJ9LCJpYXQiOjE2ODc4MDA4MDB9.K4aVM4Y0SsMI7sxF2wI-bhjkZcgRJ_CM3KjA1DbV9YU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/products/4",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"products",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Products By Category",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJmaXJzdG5hbWUiOiJtaSIsImxhc3RuYW1lIjoiTWphZSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRDT3FjYk5BLy5tU3NRWlFIdGxJaUlPN3dvUWZaaUpDNU54ZG5ZcTE1di9NQmY2QkdpSVQ5YSJ9LCJpYXQiOjE2ODc4MDA4MDB9.K4aVM4Y0SsMI7sxF2wI-bhjkZcgRJ_CM3KjA1DbV9YU",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [],
@@ -233,7 +260,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJmaXJzdG5hbWUiOiJtaSIsImxhc3RuYW1lIjoiTWphZSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRDT3FjYk5BLy5tU3NRWlFIdGxJaUlPN3dvUWZaaUpDNU54ZG5ZcTE1di9NQmY2QkdpSVQ5YSJ9LCJpYXQiOjE2ODc4MDA4MDB9.K4aVM4Y0SsMI7sxF2wI-bhjkZcgRJ_CM3KjA1DbV9YU",
+									"value": "{{jwt}}",
 									"type": "string"
 								}
 							]
@@ -267,6 +294,16 @@
 				{
 					"name": "Product to Order",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -332,7 +369,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJmaXJzdG5hbWUiOiJtaSIsImxhc3RuYW1lIjoiTWphZSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRDT3FjYk5BLy5tU3NRWlFIdGxJaUlPN3dvUWZaaUpDNU54ZG5ZcTE1di9NQmY2QkdpSVQ5YSJ9LCJpYXQiOjE2ODc4MDA4MDB9.K4aVM4Y0SsMI7sxF2wI-bhjkZcgRJ_CM3KjA1DbV9YU",
+									"value": "{{jwt}}",
 									"type": "string"
 								}
 							]

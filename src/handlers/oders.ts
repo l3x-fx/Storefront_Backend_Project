@@ -57,8 +57,8 @@ const orders_routes = (app: express.Application) => {
     app.get('/orders/:orderId', verifyAuthToken, showByOrderId)
     app.post('/orders', verifyAuthToken, createOrder)
     app.post('/orders/:orderId/products', verifyAuthToken, addProductToOrder)
-    app.get('/users/:userId/order/recent', verifyAuthToken, showRecentOrderByUserId)
-    app.get('/users/:userId/order/completed', verifyAuthToken, showCompletedOrdersByUser)
+    app.get('/orders/user/:userId/recent', verifyAuthToken, showRecentOrderByUserId)
+    app.get('/orders/user/:userId/completed', verifyAuthToken, showCompletedOrdersByUser)
 }
 
 export default orders_routes

@@ -15,18 +15,27 @@ To set up the workspace, follow these steps:
 - `5432` as Database Port
 - `3000` as Backend Port
 
-## DOTENV
+## .env
 Usually the .env file should never be included in the repository. 
 However to pass this project, I had to proved provide the environment variables, therefore the .env File is included 
 
+## Testing
+To run the tests, please change the environemnt variable `ENV`  in the file `.env`from `dev` to `test`
+
 ## Postman Collection
 To make testing easier for the reviewer, a Postman Collection is included in this repo.
+
+## To get a valid JWT Token please run create user 
+
+## Password hashing
+Please be aware that the migration provides prefilled tables, however the passwords are merely dummys and not hashed. 
 
 ## Scripts
 - ``npm run migrateup`` to set up and fill all the tables
 - ``npm run dbteardown`` to safely drop all tables
 - ``npm run start`` to run the project
 - ``npm run test``to run the tests
+
 
 ## Tech Stack 
 - ``Postgres`` for the database
