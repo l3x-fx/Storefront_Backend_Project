@@ -12,13 +12,13 @@
     Index:                          '/users'                            [GET] 
     Show:                           '/users/:id'                        [GET] 
     Create:                         '/users'                            [POST] 
-    Recent Order of User:           '/users/:userId/order/recent'       [GET]
-    All completed Orders of User:   '/users/:userId/order/completed'    [GET]
 
 #### Orders
     Show:                           '/orders/:orderId'                  [GET]
     Create:                         '/orders'                           [POST]
     Add Product To order:           '/orders/:orderId/products'         [POST]
+    Recent Order of User:           '/orders/user/:userId/recent'       [GET]
+    All completed Orders of User:   '/orders/user/:userId/completed'    [GET]
 
 ## Data Shapes
 #### Product
