@@ -2,14 +2,14 @@
     "dev": {
         "driver": "pg",
         "host": "127.0.0.1",
-        "database": "storefront_dev",
+        "database": "store_dev",
         "user": "user_one",
         "password":"asdf"
     },
     "test": {
         "driver": "pg",
         "host": "127.0.0.1",
-        "database": "storefront_test",
+        "database": "store_test",
         "user": "user_one",
         "password":"asdf"
     }

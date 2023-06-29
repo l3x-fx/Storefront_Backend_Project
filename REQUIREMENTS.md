@@ -1,66 +1,67 @@
-# API Requirements
-The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.
+## API Requirements
 
-These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
-## API Endpoints
 #### Products
 - Index: '/products' [GET] 
 - Show: '/products/:id' [GET]
-- Create [token required]: '/products' [POST]
-- [OPTIONAL] Top 5 most popular products: '/products/topfive' [GET]
-- [OPTIONAL] Products by category (args: product category): '/products/:category' [GET]
+- Create: '/products' [POST]
+- Top 5 most popular products: '/products/stats/topFive' [GET]
+- Products by category: '/products/category/:category' [GET]
 
 #### Users
-- Index [token required]: '/users' [GET] 
-- Show [token required]: '/users/:id' [GET] 
-- Create [token required]: '/users' [POST] 
+- Index: '/users' [GET] 
+- Show: '/users/:id' [GET] 
+- Create: '/users' [POST] 
+- Recent Order of User: '/users/:userId/order/recent' [GET]
+- All completed Orders of User: /users/:userId/order/completed' [GET]
 
 #### Orders
-- Current Order by user (args: user id)[token required]: '/orders/:user_id' [GET] 
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]: '/orders/completed/:user_id' [GET]                                                                             
+ - Show: '/orders/:orderId' [GET]
+ - Create: '/orders' [POST]
+ - Add Product To order: '/orders/:orderId/products'
 
 ## Data Shapes
 #### Product
 -  id
 - name
 - price
-- [OPTIONAL] category
+- category
 
 #### User
 - id
+- username
 - firstName
 - lastName
 - password
 
 #### Orders
 - id
-- id of each product in the order
-- quantity of each product in the order
 - user_id
 - status of order (active or complete)
+- products: list of products with their quantity
 
-## Tables
+## Database Tables
 #### Table Products 
-- id: SERIAL PRIMARY KEY
-- name: VARCHAR(255)
-- price: DECIMAL(10, 2) NOT NULL
-- category: VARCHAR(100)
+id          SERIAL PRIMARY KEY
+name        VARCHAR(255)
+price       INT NOT NULL
+category    VARCHAR(100)
 
 #### Table Users
-- id: SERIAL PRIMARY KEY 
-- firstname: VARCHAR(255)
-- lastname: VARCHAR(255)
-- password: VARCHAR(255)
+id              SERIAL PRIMARY KEY
+username        VARCHAR(100)
+firstname       VARCHAR(100)
+lastname        VARCHAR(100)
+password_digest VARCHAR
 
 #### Table Orders
-- id: SERIAL PRIMARY KEY
-- status: ENUM ('active', 'complete') NOT NULL
-- FOREIGN KEY (user_id) References Users(id)
+id          SERIAL PRIMARY KEY
+status      VARCHAR
+user_id     BIGINT REFERENCES users(id)
 
 #### JoinTable Order_Products
-- id: SERIAL PRIMARY KEY
-- order_id: BIGINT REFERNCES orders(id)
-- products_id: BIGINT REFERNCES products(id)
-- quantity: INT
+id          SERIAL PRIMARY KEY
+order_id    BIGINT REFERENCES orders(id)
+product_id  BIGINT REFERENCES products(id)
+quantity    INT
 
