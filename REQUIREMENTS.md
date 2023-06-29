@@ -2,23 +2,23 @@
 
 
 #### Products
-- Index: '/products' [GET] 
-- Show: '/products/:id' [GET]
-- Create: '/products' [POST]
-- Top 5 most popular products: '/products/stats/topFive' [GET]
-- Products by category: '/products/category/:category' [GET]
+    Index:                          '/products'                         [GET] 
+    Show:                           '/products/:id'                     [GET]
+    Create:                         '/products'                         [POST]
+    Top 5 most popular products:    '/products/stats/topFive'           [GET]
+    Products by category:           '/products/category/:category'      [GET]
 
 #### Users
-- Index: '/users' [GET] 
-- Show: '/users/:id' [GET] 
-- Create: '/users' [POST] 
-- Recent Order of User: '/users/:userId/order/recent' [GET]
-- All completed Orders of User: /users/:userId/order/completed' [GET]
+    Index:                          '/users'                            [GET] 
+    Show:                           '/users/:id'                        [GET] 
+    Create:                         '/users'                            [POST] 
+    Recent Order of User:           '/users/:userId/order/recent'       [GET]
+    All completed Orders of User:   '/users/:userId/order/completed'    [GET]
 
 #### Orders
- - Show: '/orders/:orderId' [GET]
- - Create: '/orders' [POST]
- - Add Product To order: '/orders/:orderId/products'
+    Show:                           '/orders/:orderId'                  [GET]
+    Create:                         '/orders'                           [POST]
+    Add Product To order:           '/orders/:orderId/products'         [POST]
 
 ## Data Shapes
 #### Product
