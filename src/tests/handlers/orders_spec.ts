@@ -41,7 +41,8 @@ beforeAll(() => {
     spyOn(store, 'getOrderById').and.returnValue(Promise.resolve(MockOrder));
     spyOn(store, 'createOrder').and.returnValue(Promise.resolve(MockOrder));
     spyOn(store, 'addProductToOrder').and.returnValue(Promise.resolve(MockOrderProducts));
-    spyOn(store, "showRecentOrderByUserId").and.returnValue(Promise.resolve(MockOrder));
+    spyOn(store, 'showRecentOrderByUserId').and.returnValue(Promise.resolve(MockOrder));
+    spyOn(store, 'showCompletedOrdersByUser').and.returnValue(Promise.resolve([MockOrder]));
 
 });
 
@@ -74,6 +75,20 @@ describe('Orders endpoint tests', () => {
             .set('Authorization', `Bearer ${token}`);
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual(MockOrder);
+    });
+    it('GET /users/:userId/order/recent should return an order', async () => {
+        const response = await request
+            .get('/users/1/order/recent')
+            .set('Authorization', `Bearer ${token}`);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual(MockOrder);
+    });
+    it('GET /users/:userId/order/completed should return an order', async () => {
+        const response = await request
+            .get('/users/1/order/completed')
+            .set('Authorization', `Bearer ${token}`);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual([MockOrder]);
     });
 
 })

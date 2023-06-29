@@ -109,7 +109,7 @@ describe ('Order Model Methods', () => {
     });
 
     it('showCompletedOrdersByUser method should show an array of completed orders of an User', async () => {
-        const result = await store.showCompletedOrdersByUser('3');
+        const result = await store.showCompletedOrdersByUser(3);
 
         const ReturnOrder:Order[] = [{
             id: 8,

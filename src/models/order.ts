@@ -68,6 +68,19 @@ export class OrderStore  {
         }
     }
 
+    async showProductsOfOrder(order_id: number): Promise<OrderProducts[]>  {
+        try{
+            const sql = 'SELECT product_id, quantity FROM order_products WHERE order_id=($1)'
+            // @ts-ignore
+            const conn = await Client.connect()
+            const result = await conn.query(sql, [order_id])
+            conn.release()
+            return result.rows
+        }catch{
+            throw new Error(`Could not get products of order `)
+        }
+    }
+
     async showRecentOrderByUserId(id: number): Promise<Order> {
         try {
             // @ts-ignore
@@ -91,20 +104,7 @@ export class OrderStore  {
         }
     }
 
-    async showProductsOfOrder(order_id: number): Promise<OrderProducts[]>  {
-        try{
-            const sql = 'SELECT product_id, quantity FROM order_products WHERE order_id=($1)'
-            // @ts-ignore
-            const conn = await Client.connect()
-            const result = await conn.query(sql, [order_id])
-            conn.release()
-            return result.rows
-        }catch{
-            throw new Error(`Could not get products of order `)
-        }
-    }
-
-    async showCompletedOrdersByUser(id: string, status='complete'): Promise<Order[]> {
+    async showCompletedOrdersByUser(id: number, status='complete'): Promise<Order[]> {
         try {
             const sql = 'SELECT * FROM orders WHERE user_id=($1) AND status=($2);'
             // @ts-ignore

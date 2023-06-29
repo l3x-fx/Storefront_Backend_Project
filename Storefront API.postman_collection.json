@@ -7,10 +7,53 @@
 	},
 	"item": [
 		{
-			"name": "Orders",
+			"name": "Products",
 			"item": [
 				{
-					"name": "Empty Order",
+					"name": "All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top 5 Products",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/products/stats/topFive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products",
+								"stats",
+								"topFive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product By ID",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -22,71 +65,32 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"user_id\": \"3\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:3000/orders/",
+							"raw": "http://localhost:3000/products/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"orders",
-								""
+								"products",
+								"4"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Product to Order",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{   \r\n    \"quantity\": 77, \r\n    \"product_id\": 3\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/orders/2/products",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"orders",
-								"2",
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Order by ID",
+					"name": "Products By Category",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{jwt}}",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJmaXJzdG5hbWUiOiJtaSIsImxhc3RuYW1lIjoiTWphZSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRDT3FjYk5BLy5tU3NRWlFIdGxJaUlPN3dvUWZaaUpDNU54ZG5ZcTE1di9NQmY2QkdpSVQ5YSJ9LCJpYXQiOjE2ODc4MDA4MDB9.K4aVM4Y0SsMI7sxF2wI-bhjkZcgRJ_CM3KjA1DbV9YU",
 									"type": "string"
 								}
 							]
@@ -94,15 +98,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/orders/2",
+							"raw": "http://localhost:3000/products/category/Apparel",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"orders",
-								"2"
+								"products",
+								"category",
+								"Apparel"
 							]
 						}
 					},
@@ -214,6 +219,110 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Empty Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJmaXJzdG5hbWUiOiJtaSIsImxhc3RuYW1lIjoiTWphZSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRDT3FjYk5BLy5tU3NRWlFIdGxJaUlPN3dvUWZaaUpDNU54ZG5ZcTE1di9NQmY2QkdpSVQ5YSJ9LCJpYXQiOjE2ODc4MDA4MDB9.K4aVM4Y0SsMI7sxF2wI-bhjkZcgRJ_CM3KjA1DbV9YU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"user_id\": \"3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/orders/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product to Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"quantity\": 77, \r\n    \"product_id\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/orders/2/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"2",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/orders/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"2"
+							]
+						}
+					},
+					"response": []
 				},
 				{
 					"name": "Recent Order by User",
@@ -231,16 +340,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/users/2/order/recent",
+							"raw": "http://localhost:3000/orders/user/2/recent",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"users",
+								"orders",
+								"user",
 								"2",
-								"order",
 								"recent"
 							]
 						}
@@ -263,126 +372,17 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/users/1/order/completed",
+							"raw": "http://localhost:3000/orders/user/1/completed",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"users",
+								"orders",
+								"user",
 								"1",
-								"order",
 								"completed"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Products",
-			"item": [
-				{
-					"name": "All Products",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/products",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Top 5 Products",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/products/stats/topFive",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"products",
-								"stats",
-								"topFive"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Product By ID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJmaXJzdG5hbWUiOiJtaSIsImxhc3RuYW1lIjoiTWphZSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRDT3FjYk5BLy5tU3NRWlFIdGxJaUlPN3dvUWZaaUpDNU54ZG5ZcTE1di9NQmY2QkdpSVQ5YSJ9LCJpYXQiOjE2ODc4MDA4MDB9.K4aVM4Y0SsMI7sxF2wI-bhjkZcgRJ_CM3KjA1DbV9YU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/products/4",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"products",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Products By Category",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJmaXJzdG5hbWUiOiJtaSIsImxhc3RuYW1lIjoiTWphZSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRDT3FjYk5BLy5tU3NRWlFIdGxJaUlPN3dvUWZaaUpDNU54ZG5ZcTE1di9NQmY2QkdpSVQ5YSJ9LCJpYXQiOjE2ODc4MDA4MDB9.K4aVM4Y0SsMI7sxF2wI-bhjkZcgRJ_CM3KjA1DbV9YU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/products/category/Apparel",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"products",
-								"category",
-								"Apparel"
 							]
 						}
 					},
