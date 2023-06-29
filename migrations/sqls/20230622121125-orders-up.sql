@@ -1,7 +1,7 @@
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     status VARCHAR,
-    user_id BIGINT REFERENCES orders(id)
+    user_id BIGINT REFERENCES users(id)
 );
 
 INSERT INTO orders (status, user_id) VALUES 

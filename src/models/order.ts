@@ -2,16 +2,16 @@
 import Client from '../database'
 
 export type Order = {
-    id?: Number;
+    id?: number;
     status: string; 
-    user_id: number;
+    user_id: string;
     products?: OrderProducts[]
 }
 
 export type OrderProducts =  {
     id?: Number;
-    product_id: number, 
-    order_id: number,
+    product_id: string, 
+    order_id?: string,
     quantity: number
 }
 
@@ -25,16 +25,14 @@ export class OrderStore  {
             const result = await conn.query(sql1, [id])    
             conn.release()   
             const order:Order = result.rows[0]
-            
             const productsOfOrder:OrderProducts[] = await this.showProductsOfOrder(order.id as number)
-            console.log(productsOfOrder)
+            
             const updatedOrder:Order = {
                 id: order.id,
                 status: order.status, 
-                user_id: order.user_id,
+                user_id: order.user_id ,
                 products: productsOfOrder
             }
-            
             return updatedOrder
 
 
@@ -57,7 +55,7 @@ export class OrderStore  {
         }
     }
 
-    async addProductToOrder(product:OrderProducts): Promise<Order> {
+    async addProductToOrder(product:OrderProducts): Promise<OrderProducts> {
         try {
             const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
             //@ts-ignore
@@ -106,16 +104,15 @@ export class OrderStore  {
         }
     }
 
-    async showCompletedOrdersByUser(id: string): Promise<Order[]> {
+    async showCompletedOrdersByUser(id: string, status='complete'): Promise<Order[]> {
         try {
-            const sql = 'SELECT * FROM orders WHERE user_id=($1) AND status=complete;'
+            const sql = 'SELECT * FROM orders WHERE user_id=($1) AND status=($2);'
             // @ts-ignore
             const conn = await Client.connect()        
-            const orderShort  = await conn.query(sql, [id])               
-            conn.release()        
-            
+            const orderShort  = await conn.query(sql, [id, status])      
+            conn.release()
             const order = await Promise.all(
-                orderShort.map(async(o:{id:number, status:string, user_id:number}) => {
+                orderShort.rows.map(async(o:{id:number, status:string, user_id:string}) => {
                     try {
                         const result = await this.showProductsOfOrder(o.id)
 
@@ -135,7 +132,7 @@ export class OrderStore  {
             return order
 
         } catch (err) {
-            throw new Error(`Could not add completed orders of user user ${id}. Error: ${err}`)
+            throw new Error(`Could not show completed orders of user user ${id}. Error: ${err}`)
         }
     }
 

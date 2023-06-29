@@ -1,87 +1,123 @@
-const UserStore = require("../user")
+// @ts-ignore
+import Client from '../../database'
+import { Order, OrderProducts, OrderStore } from '../../models/order';
 
-const store = new UserStore()
+const store = new OrderStore()
 
-describe ("User Model", () => {
-    it ('should have an index method', () => {
-        expect (store.index).toBeDefined()
-    })
+afterEach(async () => {
+    //@ts-ignore
+    const conn = await Client.connect()
+    const sql1 = 'DELETE FROM orders WHERE id > 14';
+    const sql2 = 'DELETE FROM order_products WHERE id > 22';
 
-    it ('index method should return a list of users', async () => {
-        const result = await store.index();
-        expect (result).toEqual ([])
-    })
+    try {
+        await conn.query(sql1);
+        await conn.query(sql2);
+        conn.release()
+    } catch (err) {
+        console.error('Error deleting user:', err);
+    }
+});
+
+describe ("Order Model", () => {
+    it ('should have an getOrderById method', () => {
+        expect (store.getOrderById).toBeDefined()
+    }); 
+    it ('should have createOrder method', () => {
+        expect (store.createOrder).toBeDefined()
+    }); 
+    it ('should have addProductToOrder method', () => {
+        expect (store.addProductToOrder).toBeDefined()
+    });
+    it ('should have showRecentOrderByUserId method', () => {
+        expect (store.showRecentOrderByUserId).toBeDefined()
+    }); 
+    it ('should have an showProductsOfOrder method', () => {
+        expect (store.showProductsOfOrder).toBeDefined()
+    }); 
+    it ('should have showCompletedOrdersByUser method', () => {
+        expect (store.showCompletedOrdersByUser).toBeDefined()
+    }); 
+
 })
+describe ('Order Model Methods', () => {
+    it ('getOrderById method should return an order by ID', async () => {
+        const result:Order = await store.getOrderById(1);
+        const ReturnOrder:Order= {
+            id:1,
+            status:"complete",
+            user_id:"4", 
+            products: [{product_id:"1", quantity: 2}]
+        }
+        expect(result).toEqual(ReturnOrder) 
+    });
+    
+    it ('createOrder method should create an empty order and return it', async () => {
+        const result = await store.createOrder(1);
 
+        const ReturnOrder = {
+            id:15,
+            status:"active", 
+            user_id: "1"
+        }
 
-// MORE EXAMPLES
-// import { Book, BookStore } from '../book';
+        expect(result).toEqual(ReturnOrder)
+    });
 
-// const store = new BookStore()
+    it ('addProductToOrder method should add a product to the order and return it', async () => {
+        const MockProduct:OrderProducts= {
+            quantity:6, 
+            order_id: '2',
+            product_id: '3',
+        }
 
-// describe("Book Model", () => {
-//   it('should have an index method', () => {
-//     expect(store.index).toBeDefined();
-//   });
+        const ReturnOrderProduct:OrderProducts = {
+            id:23,
+            order_id: '2',
+            product_id: '3',
+            quantity: 6
+        }
 
-//   it('should have a show method', () => {
-//     expect(store.index).toBeDefined();
-//   });
+        const result = await store.addProductToOrder(MockProduct);
 
-//   it('should have a create method', () => {
-//     expect(store.index).toBeDefined();
-//   });
+        expect(result).toEqual(ReturnOrderProduct)
 
-//   it('should have a update method', () => {
-//     expect(store.index).toBeDefined();
-//   });
+    }); 
 
-//   it('should have a delete method', () => {
-//     expect(store.index).toBeDefined();
-//   });
+    it ('showProductsOfOrder should return all products of an existing order', async()=> {
+        const result = await store.showProductsOfOrder(7)
+        const ReturnOrderProduct:OrderProducts[] = [
+            {
+                product_id:'2', 
+                quantity:1
+            }
+        ]
+        expect(result).toEqual(ReturnOrderProduct)
+    })
 
-//   it('create method should add a book', async () => {
-//     const result = await store.create({
-//       title: 'Bridge to Terabithia',
-//       totalPages: 250,
-//       author: 'Katherine Paterson',
-//       summary: 'Childrens'
-//     });
-//     expect(result).toEqual({
-//       id: "1",
-//       title: 'Bridge to Terabithia',
-//       totalPages: 250,
-//       author: 'Katherine Paterson',
-//       summary: 'Childrens'
-//     });
-//   });
+    it('showRecentOrderByUserId method should show the latest active order of an User', async () => {
+        const result = await store.showRecentOrderByUserId(2);
 
-//   it('index method should return a list of books', async () => {
-//     const result = await store.index();
-//     expect(result).toEqual([{
-//       id: "1",
-//       title: 'Bridge to Terabithia',
-//       totalPages: 250,
-//       author: 'Katherine Paterson',
-//       summary: 'Childrens'
-//     }]);
-//   });
+        const ReturnOrder:Order = {
+            id: 7,
+            status: 'active',
+            user_id: '2',
+            products: [ { product_id: '2', quantity: 1 } ]
+        }
+        
+        expect(result).toEqual(ReturnOrder)
+    });
 
-//   it('show method should return the correct book', async () => {
-//     const result = await store.show("1");
-//     expect(result).toEqual({
-//       id: "1",
-//       title: 'Bridge to Terabithia',
-//       totalPages: 250,
-//       author: 'Katherine Paterson',
-//       summary: 'Childrens'
-//     });
-//   });
+    it('showCompletedOrdersByUser method should show an array of completed orders of an User', async () => {
+        const result = await store.showCompletedOrdersByUser('3');
 
-//   it('delete method should remove the book', async () => {
-//     store.delete("1");
-//     const result = await store.index()
-
-//     expect(result).toEqual([]);
-//   });
-// });
+        const ReturnOrder:Order[] = [{
+            id: 8,
+            status: 'complete',
+            user_id: '3',
+            products: [ { product_id: '7', quantity: 3 } ]
+        }]
+        
+        expect(result).toEqual(ReturnOrder)
+    });
+})     

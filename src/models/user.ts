@@ -9,11 +9,12 @@ const pepper = BCRYPT_PASSWORD
 const saltRounds = SALT_ROUNDS
 
 export type User = {
+    password_digest?: string  
     id?: Number;
     username: string;
     firstname: string; 
     lastname: string;
-    password: string;
+    password?: string;
 }
 
 export class UserStore  {
@@ -31,7 +32,7 @@ export class UserStore  {
         
     }
 
-    async showUserById(id: string): Promise<User> {
+    async showUserById(id: number): Promise<User> {
         try {
             const sql = 'SELECT * FROM users WHERE id=($1)'
             // @ts-ignore
@@ -51,33 +52,16 @@ export class UserStore  {
             const conn = await Client.connect()     
             
             const hash = bcrypt.hashSync(
+                //@ts-ignore
                 user.password + pepper,
             // @ts-ignore
                 parseInt(saltRounds)
             );
-            console.log(hash)
             const result = await conn.query(sql, [user.username, user.firstname, user.lastname, hash])
             conn.release()        
             return result.rows[0]     
         } catch (err) {
             throw new Error(`Could not add new user ${user.firstname} ${user.lastname}. Error: ${err}`)
         }
-    }
-    
-
-    async authenticate(username:string, password:string): Promise<User | null> {
-        // @ts-ignore
-        const conn = await Client.connect()
-        const sql = 'SELECT password_digest FROM users WHERE username=($1)'
-        const result = await conn.query(sql, [username ])
-        conn.release() 
-        
-        if(result.rows.length) {  
-            const user = result.rows[0]         
-            if (bcrypt.compareSync(password + pepper, user.password_digest)) {
-            return user
-            }
-        }
-        return null
     }
 }

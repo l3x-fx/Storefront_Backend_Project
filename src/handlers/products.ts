@@ -3,7 +3,7 @@ import { Product } from "../models/product"
 import { ProductStore } from '../models/product'
 import { verifyAuthToken } from '../auth/auth'
 
-const store = new ProductStore()
+export const store = new ProductStore()
 
 const index = async (_req: Request, res: Response) => {
     try{

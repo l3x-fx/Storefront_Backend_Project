@@ -9,7 +9,7 @@ import { verifyAuthToken } from '../auth/auth'
 dotenv.config()
 const {TOKEN_SECRET} = process.env
 
-const store = new UserStore()
+export const store = new UserStore()
 
 const index = async (_req: Request, res: Response) => {
     try {
@@ -22,7 +22,7 @@ const index = async (_req: Request, res: Response) => {
     
 const show = async (req: Request, res: Response) => {
     try {
-        const user = await store.showUserById(req.params.id);
+        const user = await store.showUserById(parseInt(req.params.id));
         res.json(user);
     } catch (error) {
         res.status(401).json({ error });
