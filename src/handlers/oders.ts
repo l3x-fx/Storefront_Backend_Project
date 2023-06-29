@@ -35,21 +35,10 @@ const addProductToOrder = async (req: Request, res: Response) => {
         }
 }
 
-const showRecentOrderByUserId = async (req: Request, res: Response) => {
-    try {
-        const order = await store.showRecentOrderByUserId(parseInt(req.params.userId))
-    res.json(order)
-    } catch (error) {
-        res.status(401).json({ error });
-    }
-}
-
 const orders_routes = (app: express.Application) => {
     app.get('/orders/:orderId', verifyAuthToken, showByOrderId)
     app.post('/orders', verifyAuthToken, createOrder)
     app.post('/orders/:orderId/products', addProductToOrder)
-    app.get('/users/:userId/order/recent', showRecentOrderByUserId)
-
 }
 
 export default orders_routes

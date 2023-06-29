@@ -64,4 +64,5 @@ export class UserStore  {
             throw new Error(`Could not add new user ${user.firstname} ${user.lastname}. Error: ${err}`)
         }
     }
+    
 }
