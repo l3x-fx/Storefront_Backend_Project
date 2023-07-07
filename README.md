@@ -11,7 +11,7 @@ To set up the workspace, follow these steps:
 
 ## Ports
 - `5432` as Database Port
-- `3000` as Backend Port
+- `8080` as Backend Port
 
 ## Testing
 To run the tests, please change the environemnt variable `ENV`  in the file `.env`from `dev` to `test`

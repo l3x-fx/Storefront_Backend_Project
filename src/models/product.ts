@@ -8,6 +8,8 @@ dotenv.config()
 export type Product = {
     id?: Number;
     name: string; 
+    description: string;
+    url:string;
     price: number;
     category: string;
     total_quantity?: number;
@@ -86,6 +88,8 @@ export class ProductStore  {
                             id: product.id,
                             name: result.name,
                             price: result.price,
+                            description: result.description,
+                            url: result.url,
                             category: result.category,
                             total_quantity: product.total_quantity                
                         };

@@ -28,6 +28,8 @@ const createProduct = async (req: Request, res: Response) => {
     try{
         const product: Product = { 
             name: req.body.name, 
+            description: req.body.description,
+            url: req.body.url,
             price: req.body.price, 
             category: req.body.category 
         } 
