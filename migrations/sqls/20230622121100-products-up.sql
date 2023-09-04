@@ -2,12 +2,12 @@ CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255), 
     description VARCHAR(255), 
-    url VARCHAR(255),
+    img_url VARCHAR(255),
     price INT NOT NULL, 
     category VARCHAR(100)
 );
 
-INSERT INTO products (name, description, url, price, category) VALUES
+INSERT INTO products (name, description, img_url, price, category) VALUES
     ('Coffee', 'Premium blend coffee', 'https://i.imgur.com/IBvAwo4.jpg', 79, 'Food'),
     ('Whiskey', 'Aged whiskey', 'https://i.imgur.com/mZHcAq1.jpg', 1259, 'Food'),
     ('Sunglasses', 'Fashionable sunglasses', 'https://i.imgur.com/XS3vJMn.jpg', 299, 'Clothing'),
