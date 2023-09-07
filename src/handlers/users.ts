@@ -26,7 +26,7 @@ const signup = async (req: Request, res: Response) => {
     const newUser = await store.signup(user)
 
     let token = jwt.sign({ user: newUser }, TOKEN_SECRET as Secret)
-    res.status(201).json({ user: newUser, token: token })
+    res.status(201).json({ user: newUser.id, token: token })
   } catch (error) {
     console.log(error)
     res.status(401).json({ error })
@@ -37,7 +37,7 @@ const login = async (req: Request, res: Response) => {
   try {
     const user: UserLogin = req.body.user
     const loggedInUser: User = await store.login(user)
-    let token = jwt.sign({ userId: loggedInUser }, TOKEN_SECRET as Secret)
+    let token = jwt.sign({ user: loggedInUser }, TOKEN_SECRET as Secret)
     res.json({ user: loggedInUser, token: token })
   } catch (error) {
     console.log(error)
