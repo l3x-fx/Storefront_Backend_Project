@@ -5,28 +5,24 @@ import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 dotenv.config();
 const { TOKEN_SECRET } = process.env;
 
-const verifyJwtToken = (authorizationHeader: string | undefined): string | JwtPayload => {
-  const token: string | undefined = authorizationHeader?.split(" ")[1];
-  return jwt.verify(token as string, TOKEN_SECRET as Secret);
-};
-
-export const verifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    verifyJwtToken(req.headers.authorization);
-    next();
-  } catch (error) {
-    res.status(401);
-    res.json("Access denied, invalid token");
-  }
-};
-
 export const authorizeUser = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const decodedAndVerifiedToken = verifyJwtToken(req.headers.authorization);
-    const requestedUserId = req.params.userId;
+    const token: string | undefined = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized, token missing" });
+    }
+    let authenticatedUser: JwtPayload | undefined;
+    try {
+      authenticatedUser = jwt.verify(token.split(" ")[1], TOKEN_SECRET as Secret) as JwtPayload;
+    } catch (verificationError) {
+      return res.status(403).json({ error: "Access denied, token invalid" });
+    }
+
+    const requestedUserId = parseInt(req.params.userId);
+
     // @ts-ignore
-    if (requestedUserId !== decodedAndVerifiedToken.user.id) {
-      res.status(403).json({ error: "Access denied, not authorized" });
+    if ((requestedUserId as number) !== authenticatedUser.user.id) {
+      return res.status(403).json({ error: "Access denied, not authorized" });
     }
     next();
   } catch (error) {

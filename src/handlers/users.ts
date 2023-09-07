@@ -4,7 +4,7 @@ import { User, UserLogin } from "../models/user";
 import { UserStore } from "../models/user";
 import dotenv from "dotenv";
 import jwt, { Secret } from "jsonwebtoken";
-import { verifyAuthToken, authorizeUser } from "../auth/auth";
+import { authorizeUser } from "../auth/auth";
 
 dotenv.config();
 const { TOKEN_SECRET } = process.env;
@@ -28,6 +28,7 @@ const signup = async (req: Request, res: Response) => {
     let token = jwt.sign({ user: newUser }, TOKEN_SECRET as Secret);
     res.json(token);
   } catch (error) {
+    console.log(error);
     res.status(401).json({ error });
   }
 };
@@ -39,20 +40,32 @@ const login = async (req: Request, res: Response) => {
     let token = jwt.sign({ user: loggedInUser }, TOKEN_SECRET as Secret);
     res.json(token);
   } catch (error) {
+    console.log(error);
     res.status(401).json({ error });
   }
 };
 
 const showUserById = async (req: Request, res: Response) => {
   try {
-    const user = await store.showUserById(parseInt(req.params.id));
+    const userId = parseInt(req.params.userId);
+    const user = await store.showUserById(userId);
     res.json(user);
   } catch (error) {
     res.status(401).json({ error });
   }
 };
 
-const editUserInfosById = async (req: Request, res: Response) => {};
+const editUserInfosById = async (req: Request, res: Response) => {
+  try {
+    const user = req.body.user;
+    const userId = parseInt(req.params.userId);
+    const newUser = await store.editUserInfosById(user, userId);
+    res.json(newUser);
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ error });
+  }
+};
 
 const users_routes = (app: express.Application) => {
   app.post("/signup", signup);
