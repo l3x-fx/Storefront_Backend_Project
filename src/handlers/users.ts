@@ -26,7 +26,7 @@ const signup = async (req: Request, res: Response) => {
     const newUser = await store.signup(user)
 
     let token = jwt.sign({ user: newUser }, TOKEN_SECRET as Secret)
-    res.status(201).json({ user: newUser.id, token: token })
+    res.status(201).json({ user: newUser, token: token })
   } catch (error) {
     console.log(error)
     res.status(401).json({ error })
@@ -69,7 +69,7 @@ const editUserInfosById = async (req: Request, res: Response) => {
 
 const users_routes = (app: express.Application) => {
   app.post("/signup", signup)
-  app.get("/login", login)
+  app.post("/login", login)
   app.get("/users/:userId", authorizeUser, showUserById)
   app.put("/users/:userId", authorizeUser, editUserInfosById)
 }
