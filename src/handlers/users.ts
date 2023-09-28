@@ -27,9 +27,9 @@ const signup = async (req: Request, res: Response) => {
 
     let token = jwt.sign({ user: newUser }, TOKEN_SECRET as Secret)
     res.status(201).json({ user: newUser, token: token })
-  } catch (error) {
-    console.log(error)
-    res.status(401).json({ error })
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(401).json({ error: result })
   }
 }
 
@@ -39,9 +39,9 @@ const login = async (req: Request, res: Response) => {
     const loggedInUser: User = await store.login(user)
     let token = jwt.sign({ user: loggedInUser }, TOKEN_SECRET as Secret)
     res.json({ user: loggedInUser, token: token })
-  } catch (error) {
-    console.log(error)
-    res.status(401).json({ error })
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(401).json({ error: result })
   }
 }
 
@@ -50,8 +50,9 @@ const showUserById = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId)
     const user = await store.showUserById(userId)
     res.json(user)
-  } catch (error) {
-    res.status(401).json({ error })
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(401).json({ error: result })
   }
 }
 
@@ -61,9 +62,9 @@ const editUserInfosById = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId)
     const newUser = await store.editUserInfosById(user, userId)
     res.json(newUser)
-  } catch (error) {
-    console.log(error)
-    res.status(401).json({ error })
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(401).json({ error: result })
   }
 }
 

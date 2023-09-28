@@ -13,15 +13,17 @@ const createOrder = async (req: Request, res: Response) => {
       products.map(async (product: CartItem) => {
         try {
           await store.addProductToOrder(newOrderId, product)
-        } catch (error) {
+        } catch (err) {
           await store.flagOrderInvalid(newOrderId)
-          res.status(401).json({ error })
+          const result = (err as Error).message
+          res.status(401).json({ error: result })
         }
       })
     )
     res.json(newOrderId)
-  } catch (error) {
-    res.status(400).json({ error })
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(400).json({ error: result })
   }
 }
 
@@ -29,8 +31,9 @@ const getAllOrdersByUserId = async (req: Request, res: Response) => {
   try {
     const order = await store.getAllOrdersByUserId(parseInt(req.params.userId))
     res.json(order)
-  } catch (error) {
-    res.status(401).json({ error })
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(401).json({ error: result })
   }
 }
 
@@ -38,8 +41,9 @@ const getOrderByUserId = async (req: Request, res: Response) => {
   try {
     const order = await store.getOrderByUserId(parseInt(req.params.orderId), parseInt(req.params.userId))
     res.json(order)
-  } catch (error) {
-    res.status(401).json({ error })
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(401).json({ error: result })
   }
 }
 
