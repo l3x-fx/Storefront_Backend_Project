@@ -64,6 +64,7 @@ const editUserInfosById = async (req: Request, res: Response) => {
     res.json(newUser)
   } catch (err) {
     const result = (err as Error).message
+    console.log(result)
     res.status(401).json({ error: result })
   }
 }
