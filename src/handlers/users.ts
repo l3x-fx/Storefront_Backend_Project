@@ -23,8 +23,8 @@ const signup = async (req: Request, res: Response) => {
       city: "",
       country: "",
     }
-    const newUser = await store.signup(user)
 
+    const newUser = await store.signup(user)
     let token = jwt.sign({ user: newUser }, TOKEN_SECRET as Secret)
     res.status(201).json({ user: newUser, token: token })
   } catch (err) {
