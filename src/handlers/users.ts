@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express"
 
-import { User, UserLogin } from "../models/user"
+import { User, UserLogin, UserEdit } from "../models/user"
 import { UserStore } from "../models/user"
 import dotenv from "dotenv"
 import jwt, { Secret } from "jsonwebtoken"
@@ -58,7 +58,7 @@ const showUserById = async (req: Request, res: Response) => {
 
 const editUserInfosById = async (req: Request, res: Response) => {
   try {
-    const user = req.body.user
+    const user = req.body
     const userId = parseInt(req.params.userId)
     const newUser = await store.editUserInfosById(user, userId)
     res.json(newUser)

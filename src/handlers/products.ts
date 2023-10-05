@@ -33,9 +33,9 @@ const getProductByCategory = async (req: Request, res: Response) => {
   }
 }
 
-const getTopFiveProducts = async (_req: Request, res: Response) => {
+const getTopThreeProducts = async (_req: Request, res: Response) => {
   try {
-    const topFive = await store.getTopFiveProducts()
+    const topFive = await store.getTopThreeProducts()
     res.json(topFive)
   } catch (err) {
     const result = (err as Error).message
@@ -45,7 +45,7 @@ const getTopFiveProducts = async (_req: Request, res: Response) => {
 const users_routes = (app: express.Application) => {
   app.get("/products", getAllProducts)
   app.get("/products/:id", getProductById)
-  app.get("/products/stats/topFive", getTopFiveProducts)
+  app.get("/products/stats/topThree", getTopThreeProducts)
   app.get("/products/category/:category", getProductByCategory)
 }
 

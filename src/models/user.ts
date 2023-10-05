@@ -25,6 +25,15 @@ export type UserLogin = {
   email: string
   password: string
 }
+export interface UserEdit {
+  email: string
+  firstname: string
+  lastname: string
+  address: string
+  zip: number
+  city: string
+  country: string
+}
 
 export class UserStore {
   private LOGIN_ERROR = `Email or password incorrect.`
@@ -111,13 +120,12 @@ export class UserStore {
     }
   }
 
-  async editUserInfosById(user: User, id: number): Promise<User> {
+  async editUserInfosById(user: UserEdit, id: number): Promise<User> {
     try {
       const sql =
         "UPDATE users SET firstname = $1, lastname = $2, address = $3, zip = $4, city = $5, country = $6 WHERE id = $7 RETURNING *"
       // @ts-ignore
       const conn = await Client.connect()
-      console.log("ID", id)
       const result = await conn.query(sql, [
         user.firstname,
         user.lastname,
@@ -130,7 +138,7 @@ export class UserStore {
       conn.release()
       return result.rows[0]
     } catch (err) {
-      throw new Error(`Cound not change details of user ${user.id}. Error: ${err}`)
+      throw new Error(`Cound not change details of user ${id}. Error: ${err}`)
     }
   }
 }
