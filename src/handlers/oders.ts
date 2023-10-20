@@ -8,7 +8,7 @@ export const store = new OrderStore()
 const createOrder = async (req: Request, res: Response) => {
   try {
     const newOrderId: number = await store.createOrder(parseInt(req.params.userId))
-    const products = req.body.products
+    const products = req.body
     const order = await Promise.all(
       products.map(async (product: CartItem) => {
         try {

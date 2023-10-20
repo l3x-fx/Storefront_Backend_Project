@@ -9,7 +9,7 @@ export type Product = {
   id: Number
   name: string
   description: string
-  url: string
+  img_url: string
   price: number
   category: string
 }
@@ -28,7 +28,7 @@ export class ProductStore {
       conn.release()
       return result.rows
     } catch (err) {
-      throw new Error(`Could not get products: ${err}`)
+      throw new Error(`Could not load products.`)
     }
   }
 
@@ -39,9 +39,10 @@ export class ProductStore {
       const conn = await Client.connect()
       const result = await conn.query(sql, [id])
       conn.release()
+
       return result.rows[0]
     } catch (err) {
-      throw new Error(`Could not find product ${id}. Error: ${err}`)
+      throw new Error(`Could not load product.`)
     }
   }
 
@@ -54,7 +55,7 @@ export class ProductStore {
       conn.release()
       return result.rows
     } catch (err) {
-      throw new Error(`Could not find category ${category}. Error: ${err}`)
+      throw new Error(`Could not find category ${category}.`)
     }
   }
 
@@ -79,20 +80,20 @@ export class ProductStore {
               name: result.name,
               price: result.price,
               description: result.description,
-              url: result.url,
+              img_url: result.img_url,
               category: result.category,
               quantity: product.total_quantity,
             }
 
             return updatedProduct
           } catch (err) {
-            throw new Error(`Could not get product ${product.id}. Error: ${err}`)
+            throw new Error(`Could not load product.`)
           }
         })
       )
       return products
     } catch (err) {
-      throw new Error(`Could not get Top 3 products. Error: ${err}`)
+      throw new Error(`Could not get Top 3 products.`)
     }
   }
 }

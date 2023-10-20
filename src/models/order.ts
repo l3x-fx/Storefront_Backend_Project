@@ -36,7 +36,7 @@ export class OrderStore {
 
       return order.id
     } catch (err) {
-      throw new Error(`Could not create new order. Error: ${err}`)
+      throw new Error(`Could not create new order.`)
     }
   }
 
@@ -49,7 +49,7 @@ export class OrderStore {
       conn.release()
       return result.rows[0].id
     } catch (err) {
-      throw new Error(`Could now flag order ${order_id} as invalid: ${err}`)
+      throw new Error(`Could now flag order ${order_id} as invalid.`)
     }
   }
 
@@ -62,7 +62,7 @@ export class OrderStore {
       conn.release()
       return result.rows[0]
     } catch (err) {
-      throw new Error(`Could not add product ${product.id} to order ${order_id}: ${err}`)
+      throw new Error(`Could not add ${product.name} to order ${order_id}: `)
     }
   }
   async getAllOrdersByUserId(user_id: number): Promise<Order[]> {
@@ -85,13 +85,13 @@ export class OrderStore {
             }
             return updatedOrder
           } catch (err) {
-            throw new Error(`Could not find products for  ${order.id}. Error: ${err}`)
+            throw new Error(`Could not find products for  ${order.id}. `)
           }
         })
       )
       return orders
     } catch (err) {
-      throw new Error(`Could not show orders of user user ${user_id}. Error: ${err}`)
+      throw new Error(`Could not show orders of user. `)
     }
   }
 
@@ -114,7 +114,7 @@ export class OrderStore {
       }
       return updatedOrder
     } catch (err) {
-      throw new Error(`Could not find order ${order_id}. Error: ${err}`)
+      throw new Error(`Could not find order ${order_id}.`)
     }
   }
 
@@ -127,7 +127,7 @@ export class OrderStore {
       conn.release()
       return result.rows
     } catch {
-      throw new Error(`Could not get products of order `)
+      throw new Error(`Could not get products of order.`)
     }
   }
 }

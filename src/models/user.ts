@@ -36,7 +36,6 @@ export interface UserEdit {
 }
 
 export class UserStore {
-  private LOGIN_ERROR = `Email or password incorrect.`
   async confirmFreeEmail(email: string): Promise<boolean> {
     try {
       const sql = "Select * FROM users WHERE email=($1)"
@@ -48,7 +47,7 @@ export class UserStore {
       const user = result.rows[0]
       return !!user
     } catch (err) {
-      throw new Error(`Email already exists. Error: ${err}`)
+      throw new Error(`Database Error!`)
     }
   }
 
@@ -94,16 +93,17 @@ export class UserStore {
       conn.release()
       const user = result.rows[0]
       if (!user) {
-        throw new Error(this.LOGIN_ERROR)
+        throw new Error(`Email or password incorrect.`)
       }
 
       const passwordMatch = await bcrypt.compare(userLogin.password + pepper, user.password_digest)
       if (passwordMatch) {
         return user
+      } else {
+        throw new Error(`Email or password incorrect.`)
       }
-      throw new Error(this.LOGIN_ERROR)
     } catch (err) {
-      throw new Error(this.LOGIN_ERROR)
+      throw new Error(`Database Error!`)
     }
   }
 
@@ -116,7 +116,7 @@ export class UserStore {
       conn.release()
       return result.rows[0]
     } catch (err) {
-      throw new Error(`Could not find user ${id}. Error: ${err}`)
+      throw new Error(`Could not find user.`)
     }
   }
 
@@ -138,7 +138,7 @@ export class UserStore {
       conn.release()
       return result.rows[0]
     } catch (err) {
-      throw new Error(`Cound not change details of user ${id}. Error: ${err}`)
+      throw new Error(`Cound not change details of user.`)
     }
   }
 }
