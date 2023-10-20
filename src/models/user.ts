@@ -89,21 +89,30 @@ export class UserStore {
       // @ts-ignore
       const conn = await Client.connect()
       //@ts-ignore
+      if (!conn) {
+        throw new Error(`Database Error!`)
+      }
       const result = await conn.query(sql, [userLogin.email])
       conn.release()
+      console.log(result.rows)
       const user = result.rows[0]
       if (!user) {
-        throw new Error(`Email or password incorrect.`)
+        throw new Error()
       }
 
       const passwordMatch = await bcrypt.compare(userLogin.password + pepper, user.password_digest)
       if (passwordMatch) {
         return user
       } else {
-        throw new Error(`Email or password incorrect.`)
+        throw new Error()
       }
     } catch (err) {
-      throw new Error(`Database Error!`)
+      // @ts-ignore
+      if (err.code === "ECONNREFUSED") {
+        throw new Error(`Database Error!`)
+      } else {
+        throw new Error(`Email or password incorrect.`)
+      }
     }
   }
 
