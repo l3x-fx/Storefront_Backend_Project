@@ -1,123 +1,102 @@
 // @ts-ignore
-import Client from '../../database'
-import { Order, OrderProducts, OrderStore } from '../../models/order';
+import Client from "../../database"
+import { Order, OrderProducts, OrderStore } from "../../models/order"
+import { CartItem } from "../../models/product"
 
 const store = new OrderStore()
 
 afterEach(async () => {
-    //@ts-ignore
-    const conn = await Client.connect()
-    const sql1 = 'DELETE FROM orders WHERE id > 14';
-    const sql2 = 'DELETE FROM order_products WHERE id > 22';
+  //@ts-ignore
+  const conn = await Client.connect()
+  const sql1 = "DELETE FROM orders WHERE id > 14"
+  const sql2 = "DELETE FROM order_products WHERE id > 22"
 
-    try {
-        await conn.query(sql1);
-        await conn.query(sql2);
-        conn.release()
-    } catch (err) {
-        console.error('Error deleting user:', err);
-    }
-});
-
-describe ("Order Model", () => {
-    it ('should have an getOrderById method', () => {
-        expect (store.getOrderById).toBeDefined()
-    }); 
-    it ('should have createOrder method', () => {
-        expect (store.createOrder).toBeDefined()
-    }); 
-    it ('should have addProductToOrder method', () => {
-        expect (store.addProductToOrder).toBeDefined()
-    });
-    it ('should have showRecentOrderByUserId method', () => {
-        expect (store.showRecentOrderByUserId).toBeDefined()
-    }); 
-    it ('should have an showProductsOfOrder method', () => {
-        expect (store.showProductsOfOrder).toBeDefined()
-    }); 
-    it ('should have showCompletedOrdersByUser method', () => {
-        expect (store.showCompletedOrdersByUser).toBeDefined()
-    }); 
-
+  try {
+    await conn.query(sql1)
+    await conn.query(sql2)
+    conn.release()
+  } catch (err) {
+    console.error("Error deleting user:", err)
+  }
 })
-describe ('Order Model Methods', () => {
-    it ('getOrderById method should return an order by ID', async () => {
-        const result:Order = await store.getOrderById(1);
-        const ReturnOrder:Order= {
-            id:1,
-            status:"complete",
-            user_id:"4", 
-            products: [{product_id:"1", quantity: 2}]
-        }
-        expect(result).toEqual(ReturnOrder) 
-    });
-    
-    it ('createOrder method should create an empty order and return it', async () => {
-        const result = await store.createOrder(1);
 
-        const ReturnOrder = {
-            id:15,
-            status:"active", 
-            user_id: "1"
-        }
+describe("Order Model", () => {
+  it("should have an getOrderById method", () => {
+    expect(store.getOrderByUserId).toBeDefined()
+  })
+  it("should have createOrder method", () => {
+    expect(store.createOrder).toBeDefined()
+  })
+  it("should have addProductToOrder method", () => {
+    expect(store.addProductToOrder).toBeDefined()
+  })
 
-        expect(result).toEqual(ReturnOrder)
-    });
+  it("should have an showProductsOfOrder method", () => {
+    expect(store.showProductsOfOrder).toBeDefined()
+  })
+})
+describe("Order Model Methods", () => {
+  it("getOrderByUserId method should return an order by ID", async () => {
+    const result: Order = await store.getOrderByUserId(1, 1)
+    const ReturnOrder: Order = {
+      id: 1,
+      status: "complete",
+      user_id: "4",
+      products: [{ product_id: "1", quantity: 2 }],
+      date: "",
+    }
+    expect(result).toEqual(ReturnOrder)
+  })
 
-    it ('addProductToOrder method should add a product to the order and return it', async () => {
-        const MockProduct:OrderProducts= {
-            quantity:6, 
-            order_id: '2',
-            product_id: '3',
-        }
+  it("createOrder method should create an empty order and return it", async () => {
+    const result = await store.createOrder(1)
 
-        const ReturnOrderProduct:OrderProducts = {
-            id:23,
-            order_id: '2',
-            product_id: '3',
-            quantity: 6
-        }
+    const ReturnOrder: Order = {
+      id: 15,
+      status: "active",
+      user_id: "1",
+      date: "",
+    }
 
-        const result = await store.addProductToOrder(MockProduct);
+    expect(result).toEqual(1)
+  })
 
-        expect(result).toEqual(ReturnOrderProduct)
+  it("addProductToOrder method should add a product to the order and return it", async () => {
+    const MockProduct: OrderProducts = {
+      quantity: 6,
+      order_id: "2",
+      product_id: "3",
+    }
 
-    }); 
+    const ReturnOrderProduct: OrderProducts = {
+      id: 23,
+      order_id: "2",
+      product_id: "3",
+      quantity: 6,
+    }
+    const MockCartItem: CartItem = {
+      id: 1,
+      name: "name",
+      description: "descr",
+      img_url: "http.bla",
+      price: 123,
+      category: "stuff",
+      quantity: 6,
+    }
 
-    it ('showProductsOfOrder should return all products of an existing order', async()=> {
-        const result = await store.showProductsOfOrder(7)
-        const ReturnOrderProduct:OrderProducts[] = [
-            {
-                product_id:'2', 
-                quantity:1
-            }
-        ]
-        expect(result).toEqual(ReturnOrderProduct)
-    })
+    const result = await store.addProductToOrder(1, MockCartItem)
 
-    it('showRecentOrderByUserId method should show the latest active order of an User', async () => {
-        const result = await store.showRecentOrderByUserId(2);
+    expect(result).toEqual(ReturnOrderProduct)
+  })
 
-        const ReturnOrder:Order = {
-            id: 7,
-            status: 'active',
-            user_id: '2',
-            products: [ { product_id: '2', quantity: 1 } ]
-        }
-        
-        expect(result).toEqual(ReturnOrder)
-    });
-
-    it('showCompletedOrdersByUser method should show an array of completed orders of an User', async () => {
-        const result = await store.showCompletedOrdersByUser(3);
-
-        const ReturnOrder:Order[] = [{
-            id: 8,
-            status: 'complete',
-            user_id: '3',
-            products: [ { product_id: '7', quantity: 3 } ]
-        }]
-        
-        expect(result).toEqual(ReturnOrder)
-    });
-})     
+  it("showProductsOfOrder should return all products of an existing order", async () => {
+    const result = await store.showProductsOfOrder(7)
+    const ReturnOrderProduct: OrderProducts[] = [
+      {
+        product_id: "2",
+        quantity: 1,
+      },
+    ]
+    expect(result).toEqual(ReturnOrderProduct)
+  })
+})

@@ -59,7 +59,7 @@ export class ProductStore {
     }
   }
 
-  async getTopThreeProducts(): Promise<Product[]> {
+  async getTopThreeProducts(): Promise<CartItem[]> {
     try {
       const sql =
         "SELECT product_id AS id, SUM(quantity) AS total_quantity FROM order_products GROUP BY product_id ORDER BY total_quantity DESC LIMIT 3;"
