@@ -1,64 +1,56 @@
-import express, { Request, Response,  } from 'express'
-import { OrderProducts, OrderStore } from "../models/order"
-import { verifyAuthToken } from '../auth/auth'
+import express, { Request, Response } from "express"
+import { OrderStore } from "../models/order"
+import { CartItem } from "../models/product"
+import { authorizeUser } from "../auth/auth"
 
 export const store = new OrderStore()
 
-const showByOrderId = async (req: Request, res: Response) => {
-    try {
-        const order = await store.getOrderById(parseInt(req.params.orderId))
-        res.json(order)
-    } catch (error) {
-        res.status(401).json({ error });
+const createOrder = async (req: Request, res: Response) => {
+  try {
+    const newOrderId: number = await store.createOrder(parseInt(req.params.userId))
+    const products = req.body
+    const order = await Promise.all(
+      products.map(async (product: CartItem) => {
+        try {
+          await store.addProductToOrder(newOrderId, product)
+        } catch (err) {
+          await store.flagOrderInvalid(newOrderId)
+          const result = (err as Error).message
+          res.status(401).json({ error: result })
         }
+      })
+    )
+    res.json(newOrderId)
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(400).json({ error: result })
+  }
 }
 
-const createOrder = async (req: Request, res: Response) => { 
-    try {
-        const newProduct = await store.createOrder(parseInt(req.body.user_id)) 
-        res.json(newProduct)
-    } catch (error) {
-        res.status(401).json({ error });
-        }
-}
-const addProductToOrder = async (req: Request, res: Response) => { 
-    try{
-        const product:OrderProducts = {
-            quantity: parseInt(req.body.quantity),
-            order_id: req.params.orderId, 
-            product_id: req.body.product_id
-        }    
-        const addedProduct = await store.addProductToOrder(product) 
-        res.json(addedProduct)
-    } catch (error) {
-        res.status(401).json({ error });
-        }
-}
-
-const showRecentOrderByUserId = async (req: Request, res: Response) => {
-    try {
-        const order = await store.showRecentOrderByUserId(parseInt(req.params.userId))
+const getAllOrdersByUserId = async (req: Request, res: Response) => {
+  try {
+    const order = await store.getAllOrdersByUserId(parseInt(req.params.userId))
     res.json(order)
-    } catch (error) {
-        res.status(401).json({ error });
-    }
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(401).json({ error: result })
+  }
 }
 
-const showCompletedOrdersByUser = async (req: Request, res: Response) => {
-    try {
-        const order = await store.showCompletedOrdersByUser(parseInt(req.params.userId))
+const getOrderByUserId = async (req: Request, res: Response) => {
+  try {
+    const order = await store.getOrderByUserId(parseInt(req.params.orderId), parseInt(req.params.userId))
     res.json(order)
-    } catch (error) {
-        res.status(401).json({ error });
-    }
+  } catch (err) {
+    const result = (err as Error).message
+    res.status(401).json({ error: result })
+  }
 }
 
 const orders_routes = (app: express.Application) => {
-    app.get('/orders/:orderId', verifyAuthToken, showByOrderId)
-    app.post('/orders', verifyAuthToken, createOrder)
-    app.post('/orders/:orderId/products', verifyAuthToken, addProductToOrder)
-    app.get('/orders/user/:userId/recent', verifyAuthToken, showRecentOrderByUserId)
-    app.get('/orders/user/:userId/completed', verifyAuthToken, showCompletedOrdersByUser)
+  app.post("/orders/:userId", authorizeUser, createOrder)
+  app.get("/orders/:userId", authorizeUser, getAllOrdersByUserId)
+  app.get("/orders/:userId/:orderId", authorizeUser, getOrderByUserId)
 }
 
 export default orders_routes
