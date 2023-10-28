@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "start": "npm install && nodemon src/server.ts",
+    "start": "nodemon src/server.ts",
     "migrateup": "db-migrate --env test up && db-migrate up",
     "dbteardown": "db-migrate --env test --count 4 down && db-migrate --count 4 down",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
