@@ -1,9 +1,11 @@
 import dotenv from "dotenv"
 import pg from "pg"
+import fs from "fs"
 
 dotenv.config()
 
-const { AZURE_POSTGRES_HOST, AZURE_POSTGRES_DB, AZURE_POSTGRESQL_USER, AZURE_POSTGRESQL_PASSWORD } = process.env
+const { AZURE_POSTGRES_HOST, AZURE_POSTGRES_DB, AZURE_POSTGRESQL_USER, AZURE_POSTGRESQL_PASSWORD, AZURE_SSL } =
+  process.env
 
 // let Client
 
@@ -23,7 +25,7 @@ const config = {
   password: AZURE_POSTGRESQL_PASSWORD,
   database: AZURE_POSTGRES_DB,
   port: 5432,
-  ssl: true,
+  ssl: { ca: AZURE_SSL },
 }
 
 export const Client = new pg.Client(config)
