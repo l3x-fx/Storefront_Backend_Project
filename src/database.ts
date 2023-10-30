@@ -1,27 +1,29 @@
 import dotenv from "dotenv"
-import { Pool } from "pg"
+import pg from "pg"
 
 dotenv.config()
 
-const {
-  AZURE_POSTGRES_HOST,
-  AZURE_POSTGRES_DB,
-  POSTGRES_TEST_DB,
-  AZURE_POSTGRESQL_USER,
-  POSTGRES_TEST_USER,
-  AZURE_POSTGRESQL_PASSWORD,
-  ENV,
-} = process.env
+const { AZURE_POSTGRES_HOST, AZURE_POSTGRES_DB, AZURE_POSTGRESQL_USER, AZURE_POSTGRESQL_PASSWORD } = process.env
 
-let Client
+// let Client
 
-Client = new Pool({
+// Client = new Pool({
+//   host: AZURE_POSTGRES_HOST,
+//   database: AZURE_POSTGRES_DB,
+//   user: AZURE_POSTGRESQL_USER,
+//   password: AZURE_POSTGRESQL_PASSWORD as string,
+//   port: 5432,
+//   ssl: true,
+// })
+
+// export default Client
+const config = {
   host: AZURE_POSTGRES_HOST,
-  database: AZURE_POSTGRES_DB,
   user: AZURE_POSTGRESQL_USER,
-  password: AZURE_POSTGRESQL_PASSWORD as string,
+  password: AZURE_POSTGRESQL_PASSWORD,
+  database: AZURE_POSTGRES_DB,
   port: 5432,
   ssl: true,
-})
+}
 
-export default Client
+export const Client = new pg.Client(config)
