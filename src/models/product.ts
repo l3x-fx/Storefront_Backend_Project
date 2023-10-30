@@ -22,9 +22,7 @@ export class ProductStore {
   async getAllProducts(): Promise<Product[]> {
     try {
       // @ts-ignore
-      const conn = await Client.connect((err) => {
-        if (err) throw err
-      })
+      const conn = await Client.connect()
 
       const sql = "SELECT * FROM products"
       const result = await conn.query(sql)
