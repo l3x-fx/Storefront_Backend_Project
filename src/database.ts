@@ -14,24 +14,14 @@ const {
 } = process.env
 
 let Client
-console.log(ENV)
 
-if (ENV === "test") {
-  Client = new Pool({
-    host: AZURE_POSTGRES_HOST,
-    database: POSTGRES_TEST_DB,
-    user: POSTGRES_TEST_USER,
-    password: AZURE_POSTGRESQL_PASSWORD as string,
-  })
-}
-
-if (ENV === "dev") {
-  Client = new Pool({
-    host: AZURE_POSTGRES_HOST,
-    database: AZURE_POSTGRES_DB,
-    user: AZURE_POSTGRESQL_USER,
-    password: AZURE_POSTGRESQL_PASSWORD as string,
-  })
-}
+Client = new Pool({
+  host: AZURE_POSTGRES_HOST,
+  database: AZURE_POSTGRES_DB,
+  user: AZURE_POSTGRESQL_USER,
+  password: AZURE_POSTGRESQL_PASSWORD as string,
+  port: 5432,
+  ssl: true,
+})
 
 export default Client
