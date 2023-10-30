@@ -19,7 +19,6 @@ app.listen(address, function () {
 app.get("/", function (_req: Request, res: Response) {
   res.send("Server is ready!")
 })
-
 users_routes(app)
 products_routes(app)
 orders_routes(app)
