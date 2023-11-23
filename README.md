@@ -1,45 +1,24 @@
 # Storefront Backend Project
 
+**_Fullstack Nanodegree Project_**
+
+---
+
 ## Project Overview
+
 **In this project the following scenario was given**
->The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.<
 
-## Setup Databases
-To set up the workspace, follow these steps:
-- create the postgres databases `store_dev`and `store_test`. 
-- create the user `user_one` and grant access to all databases
+> The stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse the products , see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application<
 
-## Ports
-- `5432` as Database Port
-- `8080` as Backend Port
+To exceed the project requirements, additional features such as user sign-up and login, a protected user settings route, and a checkout option have been implemented.
 
-## Testing
-To run the tests, please change the environemnt variable `ENV`  in the file `.env`from `dev` to `test`
+## Tech Stack
 
-## Postman Collection
-To make testing easier for the reviewer, a Postman Collection is included in this repo.
+- `Postgres`: Database management to store and organize product and user-related data.
+- `Node/Express`: Application logic implementation to handle server-side operations and requests.
+- `dotenv`: Efficient management of environment variables for enhanced security and configuration.
+- `jsonwebtoken`: Facilitating the use of JWTs (JSON Web Tokens) for secure and authenticated communication.
+- `bycropt`: Hashing algorithm for securing sensitive information, such as user passwords.
+- `Coffee and Cats`: Fueling productivity and adding a touch of fun to the development process. Because every great tech stack deserves a little inspiration and companionship! ☕🐱
 
-## To get a valid JWT Token please run create user 
-
-## Password hashing
-Please be aware that the migration provides prefilled tables, however the passwords are merely dummys and not hashed. 
-
-## Scripts
-- ``npm run migrateup`` to set up and fill all the tables
-- ``npm run dbteardown`` to safely drop all tables
-- ``npm run start`` to run the project
-- ``npm run test``to run the tests
-
-
-## Tech Stack 
-- ``Postgres`` for the database
-- ``Node/Express`` for the application logic
-- ``dotenv`` from npm for managing environment variables
-- ``db-migrate`` from npm for migrations
-- ``jsonwebtoken`` from npm for working with JWTs
-- ``jasmine and supertest`` from npm for testing
-
-## Endpoints, Datashapes, and Tables
-... can be find in the `REQUIREMENTS.md`
-
-
+This tech stack ensures a robust and secure foundation for the development of the online storefront API.
