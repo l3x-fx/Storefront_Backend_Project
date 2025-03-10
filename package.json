@@ -5,7 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "dev": "nodemon src/app.ts",
-    "start": "node dist/sapp.js",
+    "start": "node dist/app.js",
     "migrateup": "db-migrate --env test up && db-migrate up",
     "dbteardown": "db-migrate --env test --count 4 down && db-migrate --count 4 down",
     "watch": "tsc-watch --esModuleInterop src/app.ts --outDir ./dist --onSuccess \"node ./dist/app.js\"",
