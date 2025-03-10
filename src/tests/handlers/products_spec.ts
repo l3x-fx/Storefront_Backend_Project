@@ -1,8 +1,8 @@
-import { app } from "../../server"
+import { app } from "../../app"
 import supertest from "supertest"
-import { store } from "../../handlers/products"
-import { User } from "../../models/user"
-import { CartItem, Product } from "../../models/product"
+import { store } from "../../controller/products"
+import { User } from "../../services/user"
+import { CartItem, Product } from "../../services/product"
 import jwt, { Secret } from "jsonwebtoken"
 import dotenv from "dotenv"
 

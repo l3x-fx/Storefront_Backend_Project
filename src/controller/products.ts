@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express"
-import { ProductStore } from "../models/product"
+import { ProductService } from "../services/product"
 
-export const store = new ProductStore()
+export const productService = new ProductService()
 
 const getAllProducts = async (_req: Request, res: Response) => {
   try {
-    const product = await store.getAllProducts()
-    res.json(product)
+    const products = await productService.getAllProducts()
+    res.json(products)
   } catch (err) {
     const result = (err as Error).message
     res.status(401).json({ error: result })
@@ -15,7 +15,7 @@ const getAllProducts = async (_req: Request, res: Response) => {
 
 const getProductById = async (req: Request, res: Response) => {
   try {
-    const product = await store.getProductById(parseInt(req.params.id))
+    const product = await productService.getProductById(parseInt(req.params.id))
     res.json(product)
   } catch (err) {
     const result = (err as Error).message
@@ -25,7 +25,7 @@ const getProductById = async (req: Request, res: Response) => {
 
 const getProductByCategory = async (req: Request, res: Response) => {
   try {
-    const product = await store.getProductByCategory(req.params.category)
+    const product = await productService.getProductByCategory(req.params.category)
     res.json(product)
   } catch (err) {
     const result = (err as Error).message
@@ -35,13 +35,14 @@ const getProductByCategory = async (req: Request, res: Response) => {
 
 const getTopThreeProducts = async (_req: Request, res: Response) => {
   try {
-    const topFive = await store.getTopThreeProducts()
+    const topFive = await productService.getTopThreeProducts()
     res.json(topFive)
   } catch (err) {
     const result = (err as Error).message
     res.status(401).json({ error: result })
   }
 }
+
 const users_routes = (app: express.Application) => {
   app.get("/products", getAllProducts)
   app.get("/products/:id", getProductById)

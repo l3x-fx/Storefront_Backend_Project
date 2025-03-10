@@ -2,15 +2,19 @@ import express, { Request, Response } from "express"
 import bodyParser from "body-parser"
 //@ts-ignore
 import cors from "cors"
-import users_routes from "./handlers/users"
-import products_routes from "./handlers/products"
-import orders_routes from "./handlers/oders"
+import users_routes from "./controller/users"
+import products_routes from "./controller/products"
+import orders_routes from "./controller/oders"
+import { rateLimit } from "express-rate-limit"
 
 export const app: express.Application = express()
 const address: string = "8080"
 
 app.use(bodyParser.json())
 app.use(cors())
+
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 })
+app.use(limiter)
 
 app.listen(address, function () {
   console.log(`starting app on: ${address}`)

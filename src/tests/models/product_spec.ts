@@ -1,6 +1,6 @@
 // @ts-ignore
 import Client from "../../database"
-import { Product, ProductStore } from "../../models/product"
+import { Product, ProductStore } from "../../services/product"
 
 const store = new ProductStore()
 

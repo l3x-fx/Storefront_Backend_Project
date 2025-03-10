@@ -1,12 +1,13 @@
 // @ts-ignore
-import Client from "../database"
+// import Client from "../database"
 import dotenv from "dotenv"
+import { supabase } from "../database"
 
 dotenv.config()
 //const {BCRYPT_PASSWORD, SALT_ROUNDS} = process.env
 
 export type Product = {
-  id: Number
+  id: number
   name: string
   description: string
   img_url: string
@@ -18,17 +19,14 @@ export type CartItem = Product & {
   quantity: number
 }
 
-export class ProductStore {
+export class ProductService {
   async getAllProducts(): Promise<Product[]> {
     try {
-      // @ts-ignore
-      const conn = await Client.connect()
-
-      const sql = "SELECT * FROM products"
-      const result = await conn.query(sql)
-
-      conn.release()
-      return result.rows
+      const { data, error } = await supabase.from("products").select("*")
+      if (error) {
+        throw new Error("Could not load products.")
+      }
+      return data as Product[]
     } catch (err) {
       console.log(err)
       throw new Error(`Could not load products.`)
@@ -37,13 +35,11 @@ export class ProductStore {
 
   async getProductById(id: number): Promise<Product> {
     try {
-      const sql = "SELECT * FROM products WHERE id=($1)"
-      // @ts-ignore
-      const conn = await Client.connect()
-      const result = await conn.query(sql, [id])
-      conn.release()
-
-      return result.rows[0]
+      const { data, error } = await supabase.from("products").select("*").eq("id", id).single()
+      if (error) {
+        throw new Error(`Could not find product.`)
+      }
+      return data as Product
     } catch (err) {
       throw new Error(`Could not load product.`)
     }
@@ -51,17 +47,16 @@ export class ProductStore {
 
   async getProductByCategory(category: string): Promise<Product[]> {
     try {
-      const sql = "SELECT * FROM products WHERE category=($1)"
-      // @ts-ignore
-      const conn = await Client.connect()
-      const result = await conn.query(sql, [category])
-      conn.release()
-      return result.rows
+      const { data, error } = await supabase.from("products").select("*").eq("category", category)
+      if (error) {
+        throw new Error(`Could not find category ${category}.`)
+      }
+      return data as Product[]
     } catch (err) {
       throw new Error(`Could not find category ${category}.`)
     }
   }
-
+  //muss noch geändert werden!!!
   async getTopThreeProducts(): Promise<CartItem[]> {
     try {
       const sql =

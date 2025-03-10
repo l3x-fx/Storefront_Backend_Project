@@ -1,20 +1,20 @@
 import express, { Request, Response } from "express"
-import { OrderStore } from "../models/order"
-import { CartItem } from "../models/product"
+import { OrderService } from "../services/order"
+import { CartItem } from "../services/product"
 import { authorizeUser } from "../auth/auth"
 
-export const store = new OrderStore()
+export const orderService = new OrderService()
 
 const createOrder = async (req: Request, res: Response) => {
   try {
-    const newOrderId: number = await store.createOrder(parseInt(req.params.userId))
+    const newOrderId: number = await orderService.createOrder(parseInt(req.params.userId))
     const products = req.body
     const order = await Promise.all(
       products.map(async (product: CartItem) => {
         try {
-          await store.addProductToOrder(newOrderId, product)
+          await orderService.addProductToOrder(newOrderId, product)
         } catch (err) {
-          await store.flagOrderInvalid(newOrderId)
+          await orderService.flagOrderInvalid(newOrderId)
           const result = (err as Error).message
           res.status(401).json({ error: result })
         }
@@ -29,7 +29,7 @@ const createOrder = async (req: Request, res: Response) => {
 
 const getAllOrdersByUserId = async (req: Request, res: Response) => {
   try {
-    const order = await store.getAllOrdersByUserId(parseInt(req.params.userId))
+    const order = await orderService.getAllOrdersByUserId(parseInt(req.params.userId))
     res.json(order)
   } catch (err) {
     const result = (err as Error).message
@@ -39,7 +39,7 @@ const getAllOrdersByUserId = async (req: Request, res: Response) => {
 
 const getOrderByUserId = async (req: Request, res: Response) => {
   try {
-    const order = await store.getOrderByUserId(parseInt(req.params.orderId), parseInt(req.params.userId))
+    const order = await orderService.getOrderByUserId(parseInt(req.params.orderId), parseInt(req.params.userId))
     res.json(order)
   } catch (err) {
     const result = (err as Error).message

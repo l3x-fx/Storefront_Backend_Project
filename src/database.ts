@@ -1,19 +1,13 @@
 import dotenv from "dotenv"
 import pg, { Pool } from "pg"
+import { createClient } from "@supabase/supabase-js"
 
 dotenv.config()
 
-const { AZURE_POSTGRES_HOST, AZURE_POSTGRES_DB, AZURE_POSTGRESQL_USER, AZURE_POSTGRESQL_PASSWORD } = process.env
+const { SUPABASE_URL, PUBLIC_ANON_KEY } = process.env
 
-let Client
+if (!SUPABASE_URL || !PUBLIC_ANON_KEY) {
+  throw new Error("Supabase credentials are missing. Check your .env file.")
+}
 
-Client = new Pool({
-  host: AZURE_POSTGRES_HOST,
-  database: AZURE_POSTGRES_DB,
-  user: AZURE_POSTGRESQL_USER,
-  password: AZURE_POSTGRESQL_PASSWORD as string,
-  port: 5432,
-  ssl: true,
-})
-
-export default Client
+export const supabase = createClient(SUPABASE_URL, PUBLIC_ANON_KEY)
