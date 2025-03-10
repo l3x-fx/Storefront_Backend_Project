@@ -1,8 +1,8 @@
 // @ts-ignore
 import Client from "../../database"
-import { User, UserStore } from "../../services/user"
+import { User, UserService } from "../../services/user"
 
-const store = new UserStore()
+const serivce = new UserService()
 
 afterEach(async () => {
   //@ts-ignore
@@ -20,15 +20,15 @@ afterEach(async () => {
 
 describe("User Model", () => {
   it("should have showUserById method", () => {
-    expect(store.showUserById).toBeDefined()
+    expect(serivce.showUserById).toBeDefined()
   })
   it("should have signup method", () => {
-    expect(store.signup).toBeDefined()
+    expect(serivce.signup).toBeDefined()
   })
 })
 describe("User Model Methods", () => {
   it("showUserById method should return a user", async () => {
-    const result = await store.showUserById(1)
+    const result = await serivce.showUserById(1)
 
     const ReturnUser = {
       id: 1,
@@ -58,7 +58,7 @@ describe("User Model Methods", () => {
       city: "Hobbingen",
       country: "Shire",
     }
-    const result = await store.signup(mockUser)
+    const result = await serivce.signup(mockUser)
 
     expect(result.email).toEqual("test@user")
     expect(result.firstname).toEqual("Test")

@@ -1,9 +1,9 @@
 // @ts-ignore
 import Client from "../../database"
-import { Order, OrderProducts, OrderStore } from "../../services/order"
+import { Order, OrderProducts, OrderService } from "../../services/order"
 import { CartItem } from "../../services/product"
 
-const store = new OrderStore()
+const service = new OrderService()
 
 afterEach(async () => {
   //@ts-ignore
@@ -22,22 +22,22 @@ afterEach(async () => {
 
 describe("Order Model", () => {
   it("should have an getOrderById method", () => {
-    expect(store.getOrderByUserId).toBeDefined()
+    expect(service.getOrderByUserId).toBeDefined()
   })
   it("should have createOrder method", () => {
-    expect(store.createOrder).toBeDefined()
+    expect(service.createOrder).toBeDefined()
   })
   it("should have addProductToOrder method", () => {
-    expect(store.addProductToOrder).toBeDefined()
+    expect(service.addProductToOrder).toBeDefined()
   })
 
   it("should have an showProductsOfOrder method", () => {
-    expect(store.showProductsOfOrder).toBeDefined()
+    expect(service.showProductsOfOrder).toBeDefined()
   })
 })
 describe("Order Model Methods", () => {
   it("getOrderByUserId method should return an order by ID", async () => {
-    const result: Order = await store.getOrderByUserId(1, 1)
+    const result: Order = await service.getOrderByUserId(1, 1)
     const ReturnOrder: Order = {
       id: 1,
       status: "complete",
@@ -49,7 +49,7 @@ describe("Order Model Methods", () => {
   })
 
   it("createOrder method should create an empty order and return it", async () => {
-    const result = await store.createOrder(1)
+    const result = await service.createOrder(1)
 
     const ReturnOrder: Order = {
       id: 15,
@@ -84,13 +84,13 @@ describe("Order Model Methods", () => {
       quantity: 6,
     }
 
-    const result = await store.addProductToOrder(1, MockCartItem)
+    const result = await service.addProductToOrder(1, MockCartItem)
 
     expect(result).toEqual(ReturnOrderProduct)
   })
 
   it("showProductsOfOrder should return all products of an existing order", async () => {
-    const result = await store.showProductsOfOrder(7)
+    const result = await service.showProductsOfOrder(7)
     const ReturnOrderProduct: OrderProducts[] = [
       {
         product_id: "2",

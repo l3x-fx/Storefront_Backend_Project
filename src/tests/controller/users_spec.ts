@@ -1,13 +1,12 @@
 import { app } from "../../app"
 import supertest from "supertest"
-import { store } from "../../controller/users"
-import { User } from "../../services/user"
+import { User, UserService } from "../../services/user"
 import jwt, { Secret } from "jsonwebtoken"
 import dotenv from "dotenv"
 
 dotenv.config()
 const { TOKEN_SECRET } = process.env
-
+const service = new UserService()
 const request = supertest(app)
 
 const MockUser: User = {
@@ -36,8 +35,8 @@ const MockUserReturn: User = {
 const token = jwt.sign({ user: MockUser }, TOKEN_SECRET as Secret)
 
 beforeAll(() => {
-  spyOn(store, "showUserById").and.returnValue(Promise.resolve(MockUserReturn))
-  spyOn(store, "signup").and.returnValue(Promise.resolve(MockUser))
+  spyOn(service, "showUserById").and.returnValue(Promise.resolve(MockUserReturn))
+  spyOn(service, "signup").and.returnValue(Promise.resolve(MockUser))
 })
 
 describe("Users endpoint tests", () => {

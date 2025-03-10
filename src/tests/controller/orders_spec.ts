@@ -1,8 +1,8 @@
 import { app } from "../../app"
 import supertest from "supertest"
-import { store } from "../../controller/oders"
+
 import { User } from "../../services/user"
-import { Order, OrderProducts } from "../../services/order"
+import { Order, OrderProducts, OrderService } from "../../services/order"
 import jwt, { Secret } from "jsonwebtoken"
 import dotenv from "dotenv"
 
@@ -24,7 +24,7 @@ const MockUser: User = {
 }
 
 const token = jwt.sign({ user: MockUser }, TOKEN_SECRET as Secret)
-
+const service = new OrderService()
 const MockOrder: Order = {
   id: 1,
   status: "active",
@@ -41,9 +41,9 @@ const MockOrderProducts: OrderProducts = {
 }
 
 beforeAll(() => {
-  spyOn(store, "getOrderByUserId").and.returnValue(Promise.resolve(MockOrder))
-  spyOn(store, "createOrder").and.returnValue(Promise.resolve(1))
-  spyOn(store, "addProductToOrder").and.returnValue(Promise.resolve(MockOrderProducts))
+  spyOn(service, "getOrderByUserId").and.returnValue(Promise.resolve(MockOrder))
+  spyOn(service, "createOrder").and.returnValue(Promise.resolve(1))
+  spyOn(service, "addProductToOrder").and.returnValue(Promise.resolve(MockOrderProducts))
 })
 
 describe("Orders endpoint tests", () => {

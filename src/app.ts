@@ -4,7 +4,7 @@ import bodyParser from "body-parser"
 import cors from "cors"
 import users_routes from "./controller/users"
 import products_routes from "./controller/products"
-import orders_routes from "./controller/oders"
+import orders_routes from "./controller/orders"
 import { rateLimit } from "express-rate-limit"
 
 export const app: express.Application = express()

@@ -1,8 +1,8 @@
 // @ts-ignore
 import Client from "../../database"
-import { Product, ProductStore } from "../../services/product"
+import { Product, ProductService } from "../../services/product"
 
-const store = new ProductStore()
+const service = new ProductService()
 
 afterEach(async () => {
   //@ts-ignore
@@ -20,28 +20,28 @@ afterEach(async () => {
 
 describe("Product Model", () => {
   it("should have an index method", () => {
-    expect(store.getAllProducts).toBeDefined()
+    expect(service.getAllProducts).toBeDefined()
   })
   it("should have showProductById method", () => {
-    expect(store.getProductById).toBeDefined()
+    expect(service.getProductById).toBeDefined()
   })
 
   it("should have an showProductByCategory method", () => {
-    expect(store.getProductByCategory).toBeDefined()
+    expect(service.getProductByCategory).toBeDefined()
   })
   it("should have showTopFiveProducts method", () => {
-    expect(store.getTopThreeProducts).toBeDefined()
+    expect(service.getTopThreeProducts).toBeDefined()
   })
 })
 
 describe("Product Model Methods", () => {
   it("index method should return a list of products", async () => {
-    const result = await store.getAllProducts()
+    const result = await service.getAllProducts()
     expect(result.length).toBeGreaterThan(6)
   })
 
   it("showProductById method should return a product by ID", async () => {
-    const result = await store.getProductById(1)
+    const result = await service.getProductById(1)
 
     const ReturnProduct: Product = {
       id: 1,
@@ -56,12 +56,12 @@ describe("Product Model Methods", () => {
   })
 
   it("showProductByCategory method should show all products of a given category", async () => {
-    const result = await store.getProductByCategory("Jewelry")
+    const result = await service.getProductByCategory("Jewelry")
     expect(result.length).toEqual(2)
   })
 
   it("showTopFiveProducts method should show the 5 most ordered products", async () => {
-    const result = await store.getTopThreeProducts()
+    const result = await service.getTopThreeProducts()
 
     expect(result[0].quantity).toBeGreaterThanOrEqual(result[1].quantity as number)
     expect(result[1].quantity).toBeGreaterThanOrEqual(result[2].quantity as number)

@@ -1,6 +1,6 @@
 import { app } from "../../app"
 import supertest from "supertest"
-import { store } from "../../controller/products"
+import { ProductService } from "../../services/product"
 import { User } from "../../services/user"
 import { CartItem, Product } from "../../services/product"
 import jwt, { Secret } from "jsonwebtoken"
@@ -8,7 +8,7 @@ import dotenv from "dotenv"
 
 dotenv.config()
 const { TOKEN_SECRET } = process.env
-
+const service = new ProductService()
 const request = supertest(app)
 
 const MockUser: User = {
@@ -44,11 +44,11 @@ const MockCartItem: CartItem = {
 }
 
 beforeAll(() => {
-  spyOn(store, "getAllProducts").and.returnValue(Promise.resolve([MockProduct]))
-  spyOn(store, "getProductById").and.returnValue(Promise.resolve(MockProduct))
+  spyOn(service, "getAllProducts").and.returnValue(Promise.resolve([MockProduct]))
+  spyOn(service, "getProductById").and.returnValue(Promise.resolve(MockProduct))
 
-  spyOn(store, "getProductByCategory").and.returnValue(Promise.resolve([MockProduct]))
-  spyOn(store, "getTopThreeProducts").and.returnValue(Promise.resolve([MockCartItem]))
+  spyOn(service, "getProductByCategory").and.returnValue(Promise.resolve([MockProduct]))
+  spyOn(service, "getTopThreeProducts").and.returnValue(Promise.resolve([MockCartItem]))
 })
 
 describe("Products endpoint tests", () => {
